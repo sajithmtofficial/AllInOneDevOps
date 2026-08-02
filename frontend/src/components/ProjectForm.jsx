@@ -29,13 +29,15 @@ function ProjectForm({ refreshProjects }) {
 
   return (
     <>
+      {/* New Project Button */}
       <button
-        className="btn btn-success mb-4"
+        className="new-project-btn"
         onClick={() => setShow(true)}
       >
         + New Project
       </button>
 
+      {/* Popup */}
       {show && (
         <div className="modal-overlay">
           <div className="project-form">
@@ -43,6 +45,7 @@ function ProjectForm({ refreshProjects }) {
             <h2>Create Project</h2>
 
             <input
+              type="text"
               placeholder="Project Name"
               value={name}
               onChange={(e) => setName(e.target.value)}
@@ -54,26 +57,36 @@ function ProjectForm({ refreshProjects }) {
               onChange={(e) => setDescription(e.target.value)}
             />
 
-            <input
-              placeholder="Language"
+            {/* Language Dropdown */}
+            <select
               value={language}
               onChange={(e) => setLanguage(e.target.value)}
-            />
+            >
+              <option value="">Select Language</option>
+              <option value="Python">Python</option>
+              <option value="Java">Java</option>
+              <option value="JavaScript">JavaScript</option>
+              <option value="C++">C++</option>
+              <option value="Go">Go</option>
+              <option value="C#">C#</option>
+            </select>
 
-            <div className="d-flex gap-3 mt-3">
+            <div className="project-form-buttons">
+
               <button
-                className="btn btn-success"
+                className="create-btn"
                 onClick={submitProject}
               >
-                Create
+                Create Project
               </button>
 
               <button
-                className="btn btn-secondary"
+                className="cancel-btn"
                 onClick={() => setShow(false)}
               >
                 Cancel
               </button>
+
             </div>
 
           </div>

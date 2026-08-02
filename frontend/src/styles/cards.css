@@ -1,199 +1,379 @@
-.modal-overlay{
+/* ===========================================
+   MODAL
+=========================================== */
 
-    position:fixed;
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
 
-    top:0;
+    background: rgba(0, 0, 0, .70);
 
-    left:0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 
-    width:100%;
-
-    height:100%;
-
-    background:rgba(0,0,0,.65);
-
-    display:flex;
-
-    justify-content:center;
-
-    align-items:center;
-
-    z-index:999;
-
+    z-index: 999;
 }
 
-.project-form{
-
-    width:500px;
-
-    background:#111827;
-
-    border-radius:20px;
-
-    padding:30px;
-
-    box-shadow:0 20px 60px rgba(0,0,0,.5);
-
-}
+/* ===========================================
+   PROJECT FORM
+=========================================== */
 
 .project-form {
-    background: rgba(255,255,255,.05);
-    padding: 25px;
+    width: 550px;
+
+    background: #111827;
+
     border-radius: 20px;
-    margin-bottom: 30px;
+
+    padding: 30px;
+
     border: 1px solid rgba(255,255,255,.08);
+
     backdrop-filter: blur(20px);
+
+    box-shadow: 0 20px 60px rgba(0,0,0,.5);
 }
 
 .project-form h2 {
     color: white;
-    margin-bottom: 20px;
+    margin-bottom: 25px;
 }
 
 .project-form input,
-.project-form textarea {
+.project-form textarea,
+.project-form select {
+
     width: 100%;
-    padding: 12px;
-    margin: 15px 0 20px 0;
+
+    padding: 14px;
+
+    margin-bottom: 20px;
+
     background: #1E293B;
+
     color: white;
-    border: none;
-    border-radius: 10px;
+
+    border: 1px solid transparent;
+
+    border-radius: 12px;
+
     font-size: 16px;
-    font-family: inherit;
+
     outline: none;
+
+    transition: .3s;
 }
 
 .project-form textarea {
     height: 120px;
     resize: vertical;
-    display: block;
 }
 
-.project-form button {
-    width: 100%;
+.project-form input:focus,
+.project-form textarea:focus,
+.project-form select:focus {
+
+    border-color: #7C3AED;
+
+    box-shadow: 0 0 12px rgba(124,58,237,.4);
 }
+
+/* ===========================================
+   FORM BUTTONS
+=========================================== */
+
+.project-form-buttons {
+
+    display: flex;
+
+    gap: 15px;
+
+    margin-top: 10px;
+}
+
+.create-btn {
+
+    flex: 1;
+
+    background: #7C3AED;
+
+    color: white;
+
+    border: none;
+
+    padding: 14px;
+
+    border-radius: 12px;
+
+    font-size: 16px;
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition: .3s;
+}
+
+.create-btn:hover {
+
+    background: #6D28D9;
+
+    transform: translateY(-2px);
+}
+
+.cancel-btn {
+
+    flex: 1;
+
+    background: #374151;
+
+    color: white;
+
+    border: none;
+
+    padding: 14px;
+
+    border-radius: 12px;
+
+    font-size: 16px;
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition: .3s;
+}
+
+.cancel-btn:hover {
+
+    background: #4B5563;
+
+    transform: translateY(-2px);
+}
+
+/* ===========================================
+   NEW PROJECT BUTTON
+=========================================== */
+
+.new-project-btn {
+
+    background: #7C3AED;
+
+    color: white;
+
+    border: none;
+
+    padding: 12px 24px;
+
+    border-radius: 12px;
+
+    font-size: 16px;
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+    margin-bottom: 25px;
+
+    transition: .3s;
+}
+
+.new-project-btn:hover {
+
+    background: #6D28D9;
+
+    transform: translateY(-3px);
+
+    box-shadow: 0 12px 25px rgba(124,58,237,.35);
+}
+
+/* ===========================================
+   STATS CARD
+=========================================== */
+
 .stats-card {
+
     width: 230px;
+
     padding: 25px;
+
     border-radius: 20px;
+
     background: linear-gradient(
         135deg,
         rgba(255,255,255,.08),
         rgba(255,255,255,.04)
     );
+
     backdrop-filter: blur(18px);
+
     border: 1px solid rgba(255,255,255,.08);
-    transition: .35s;
-    cursor: pointer;
+
     box-shadow: 0 12px 35px rgba(0,0,0,.30);
+
+    transition: .35s;
+
+    cursor: pointer;
 }
 
 .stats-card:hover {
+
     transform: translateY(-10px);
+
     box-shadow: 0 25px 45px rgba(124,58,237,.35);
 }
 
 .stats-header {
+
     display: flex;
+
     justify-content: space-between;
+
     align-items: center;
 }
 
 .stats-icon {
+
     font-size: 34px;
+
     color: #7C3AED;
 }
 
 .trend {
+
     color: #22C55E;
+
     font-weight: bold;
 }
 
 .stats-card h3 {
+
     color: #94A3B8;
+
     margin-top: 20px;
 }
 
 .stats-card h1 {
+
     color: white;
+
     font-size: 48px;
+
     margin: 10px 0;
 }
 
 .stats-card p {
+
     color: #64748B;
 }
-.project-card{
 
-    margin-top:30px;
+/* ===========================================
+   PROJECT CARD
+=========================================== */
 
-    padding:30px;
+.project-card {
 
-    border-radius:20px;
+    margin-top: 30px;
 
-    background:rgba(255,255,255,.05);
+    padding: 30px;
 
-    border:1px solid rgba(255,255,255,.08);
+    border-radius: 20px;
 
-    backdrop-filter:blur(20px);
+    background: rgba(255,255,255,.05);
 
-    box-shadow:0 10px 30px rgba(0,0,0,.3);
+    border: 1px solid rgba(255,255,255,.08);
 
+    backdrop-filter: blur(20px);
+
+    box-shadow: 0 10px 30px rgba(0,0,0,.30);
+
+    transition: .3s;
 }
 
-.project-header{
+.project-card:hover {
 
-    display:flex;
+    transform: translateY(-5px);
 
-    justify-content:space-between;
-
-    align-items:center;
-
-    margin-bottom:20px;
-
+    box-shadow: 0 20px 45px rgba(0,0,0,.35);
 }
 
-.project-header h2{
+.project-header {
 
-    color:white;
+    display: flex;
 
+    justify-content: space-between;
+
+    align-items: center;
+
+    margin-bottom: 20px;
 }
 
-.status{
+.project-header h2 {
 
-    background:#16A34A;
-
-    color:white;
-
-    padding:8px 16px;
-
-    border-radius:25px;
-
-    font-size:14px;
-
+    color: white;
 }
 
-.project-card p{
+.status {
 
-    color:#CBD5E1;
+    background: #22C55E;
 
-    margin-bottom:20px;
+    color: white;
 
+    padding: 8px 18px;
+
+    border-radius: 30px;
+
+    font-size: 14px;
+
+    box-shadow: 0 0 15px rgba(34,197,94,.35);
 }
 
-.project-info{
+.project-card p {
 
-    color:white;
+    color: #CBD5E1;
 
-    margin-bottom:20px;
-
+    margin-bottom: 20px;
 }
 
-.project-buttons{
+.project-info {
 
-    display:flex;
+    color: white;
 
-    gap:15px;
+    margin-bottom: 20px;
+}
 
+.project-buttons {
+    display: flex;
+    gap: 12px;
+}
+
+.project-buttons button {
+    padding: 10px 18px;
+    border: none;
+    border-radius: 10px;
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+    transition: .3s;
+}
+
+.project-buttons button:hover {
+    transform: translateY(-2px);
+    filter: brightness(1.1);
+}
+
+.open-btn {
+    background: #2563EB;
+}
+
+.edit-btn {
+    background: #F59E0B;
+}
+
+.delete-btn {
+    background: #EF4444;
 }

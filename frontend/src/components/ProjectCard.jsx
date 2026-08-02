@@ -17,15 +17,15 @@ function ProjectCard({ project }) {
       </div>
 
       <div className="project-buttons">
-        <button className="btn btn-primary">
+        <button className="open-btn">
           <FaFolderOpen /> Open
         </button>
 
-        <button className="btn btn-warning">
+        <button className="edit-btn">
           <FaEdit /> Edit
         </button>
 
-        <button className="btn btn-danger">
+        <button className="delete-btn">
           <FaTrash /> Delete
         </button>
       </div>

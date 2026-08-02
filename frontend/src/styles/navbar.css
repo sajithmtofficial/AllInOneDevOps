@@ -1,14 +1,149 @@
-.navbar {
-  background: linear-gradient(90deg, #111827, #1e293b);
-  color: white;
-  height: 70px;
+/* =========================
+   NAVBAR
+========================= */
 
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.navbar{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
 
-  font-size: 30px;
-  font-weight: bold;
+    padding:18px 30px;
 
-  box-shadow: 0 5px 25px rgba(0, 0, 0, 0.35);
+    background:#111827;
+
+    border-bottom:1px solid rgba(255,255,255,.08);
+}
+
+.logo{
+    display:flex;
+    align-items:center;
+    gap:12px;
+
+    color:#7C3AED;
+    font-size:18px;
+    font-weight:700;
+}
+
+.logo svg{
+    font-size:28px;
+}
+
+/* =========================
+   PROFILE
+========================= */
+
+.profile-container{
+    position:relative;
+}
+
+.user-profile{
+    display:flex;
+    align-items:center;
+    gap:10px;
+
+    color:white;
+    cursor:pointer;
+
+    padding:10px 15px;
+
+    border-radius:10px;
+
+    transition:.3s;
+}
+
+.user-profile:hover{
+    background:rgba(255,255,255,.08);
+}
+
+.profile-icon{
+    font-size:34px;
+    color:#7C3AED;
+}
+
+/* =========================
+   DROPDOWN
+========================= */
+
+.profile-menu{
+    position:absolute;
+    top:65px;
+    right:0;
+
+    width:230px;
+
+    background:#1E293B;
+
+    border-radius:18px;
+
+    overflow:hidden;
+
+    border:1px solid rgba(255,255,255,.08);
+
+    box-shadow:0 15px 40px rgba(0,0,0,.45);
+
+    z-index:999;
+}
+
+/* =========================
+   PROFILE HEADER
+========================= */
+
+.profile-header{
+    text-align:center;
+    padding:20px;
+    border-bottom:1px solid rgba(255,255,255,.08);
+}
+
+.profile-avatar{
+    font-size:50px;
+    color:#7C3AED;
+    margin-bottom:10px;
+}
+
+.profile-header h4{
+    color: white;
+    margin: 10px 0 6px;
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.profile-header p{
+    color: #94A3B8;
+    font-size: 14px;
+    margin: 0;
+}
+
+/* =========================
+   MENU ITEMS
+========================= */
+
+.menu-item{
+    display:flex;
+    align-items:center;
+    gap:12px;
+
+    padding:16px 20px;
+
+    color:white;
+
+    cursor:pointer;
+
+    transition:.3s;
+}
+
+.menu-item:hover{
+    background:rgba(124,58,237,.18);
+}
+
+.logout{
+    color:#EF4444;
+    border-top:1px solid rgba(255,255,255,.08);
+}
+
+.logout:hover{
+    background:rgba(239,68,68,.15);
+}
+.active-profile{
+    background: rgba(124,58,237,.20);
+    border: 1px solid rgba(124,58,237,.35);
 }

@@ -28,7 +28,6 @@ function Welcome() {
 
         <FaCog className="top-icon"/>
 
-        <FaUserCircle className="profile-icon"/>
 
       </div>
 
