@@ -1,0 +1,50 @@
+.sidebar {
+  width: 250px;
+  min-height: 100vh;
+
+  background: linear-gradient(180deg, #111827, #0b1120);
+
+  padding: 25px;
+
+  color: white;
+
+  border-right: 1px solid rgba(255,255,255,.08);
+}
+
+.logo{
+    text-align:center;
+    color:#7C3AED;
+    margin-bottom:40px;
+}
+
+.sidebar ul{
+    list-style:none;
+    padding:0;
+}
+
+.sidebar li{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:12px;
+
+    padding:14px;
+
+    margin-bottom:10px;
+
+    border-radius:12px;
+
+    cursor:pointer;
+
+    transition:.3s;
+}
+
+.sidebar li:hover{
+
+    background:#7C3AED;
+
+    transform:translateX(8px);
+
+}

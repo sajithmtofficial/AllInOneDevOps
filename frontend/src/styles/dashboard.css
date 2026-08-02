@@ -1,0 +1,77 @@
+.welcome-container{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    margin-bottom:40px;
+
+}
+
+.welcome-left h1{
+
+    color:white;
+
+    font-size:42px;
+
+    font-weight:bold;
+
+}
+
+.welcome-left p{
+
+    color:#94A3B8;
+
+    margin-top:10px;
+
+    font-size:18px;
+
+}
+
+.welcome-left small{
+
+    color:#64748B;
+
+}
+
+.welcome-right{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:20px;
+
+}
+
+.top-icon{
+
+    color:white;
+
+    font-size:24px;
+
+    cursor:pointer;
+
+    transition:.3s;
+
+}
+
+.top-icon:hover{
+
+    color:#7C3AED;
+
+    transform:scale(1.15);
+
+}
+
+.profile-icon{
+
+    color:#7C3AED;
+
+    font-size:42px;
+
+    cursor:pointer;
+
+}
