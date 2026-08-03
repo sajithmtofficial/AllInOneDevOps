@@ -13,8 +13,30 @@ function ProjectCard({ project }) {
       <p>{project.description}</p>
 
       <div className="project-info">
-        <strong>Language:</strong> {project.language}
-      </div>
+  <p>
+    <strong>Language:</strong> {project.language}
+  </p>
+
+  <p>
+    <strong>GitHub:</strong>{" "}
+    {project.github_url ? (
+      <a
+        href={project.github_url}
+        target="_blank"
+        rel="noreferrer"
+        style={{ color: "#60A5FA" }}
+      >
+        Repository
+      </a>
+    ) : (
+      "Not Connected"
+    )}
+  </p>
+
+  <p>
+    <strong>Branch:</strong> {project.branch}
+  </p>
+</div>
 
       <div className="project-buttons">
         <button className="open-btn">

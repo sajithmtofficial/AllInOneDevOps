@@ -8,6 +8,8 @@ function ProjectForm({ refreshProjects }) {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [language, setLanguage] = useState("");
+  const [githubUrl, setGithubUrl] = useState("");
+  const [branch, setBranch] = useState("main");
 
   const submitProject = () => {
     axios
@@ -15,13 +17,21 @@ function ProjectForm({ refreshProjects }) {
         name,
         description,
         language,
+        github_url: githubUrl,
+        branch,
       })
       .then(() => {
+        // Clear Form
         setName("");
         setDescription("");
         setLanguage("");
+        setGithubUrl("");
+        setBranch("main");
 
+        // Refresh Dashboard
         refreshProjects();
+
+        // Close Popup
         setShow(false);
       })
       .catch((err) => console.log(err));
@@ -41,9 +51,9 @@ function ProjectForm({ refreshProjects }) {
       {show && (
         <div className="modal-overlay">
           <div className="project-form">
-
             <h2>Create Project</h2>
 
+            {/* Project Name */}
             <input
               type="text"
               placeholder="Project Name"
@@ -51,13 +61,14 @@ function ProjectForm({ refreshProjects }) {
               onChange={(e) => setName(e.target.value)}
             />
 
+            {/* Description */}
             <textarea
               placeholder="Description"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
             />
 
-            {/* Language Dropdown */}
+            {/* Language */}
             <select
               value={language}
               onChange={(e) => setLanguage(e.target.value)}
@@ -71,8 +82,24 @@ function ProjectForm({ refreshProjects }) {
               <option value="C#">C#</option>
             </select>
 
-            <div className="project-form-buttons">
+            {/* GitHub URL */}
+            <input
+              type="url"
+              placeholder="GitHub Repository URL"
+              value={githubUrl}
+              onChange={(e) => setGithubUrl(e.target.value)}
+            />
 
+            {/* Branch */}
+            <input
+              type="text"
+              placeholder="Branch"
+              value={branch}
+              onChange={(e) => setBranch(e.target.value)}
+            />
+
+            {/* Buttons */}
+            <div className="project-form-buttons">
               <button
                 className="create-btn"
                 onClick={submitProject}
@@ -86,9 +113,7 @@ function ProjectForm({ refreshProjects }) {
               >
                 Cancel
               </button>
-
             </div>
-
           </div>
         </div>
       )}

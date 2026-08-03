@@ -339,13 +339,24 @@
     margin-bottom: 20px;
 }
 
-.project-info {
-
-    color: white;
-
-    margin-bottom: 20px;
+.project-info{
+    color:white;
+    margin-bottom:20px;
 }
 
+.project-info p{
+    margin:8px 0;
+}
+
+.project-info a{
+    color:#60A5FA;
+    text-decoration:none;
+    font-weight:600;
+}
+
+.project-info a:hover{
+    text-decoration:underline;
+}
 .project-buttons {
     display: flex;
     gap: 12px;
