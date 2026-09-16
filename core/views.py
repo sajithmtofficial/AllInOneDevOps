@@ -1,3 +1,4 @@
+from django.http import HttpResponse
 from .github_service import get_repo_info
 from django.contrib.auth.models import User
 from rest_framework import generics
@@ -35,4 +36,10 @@ def github_info(request):
     if data:
         return Response(data)
 
-    return Response({"error": "Repository not found"}, status=404)    
+    return Response({"error": "Repository not found"}, status=404)   
+ 
+from django.http import HttpResponse
+
+
+def home(request):
+    return HttpResponse("All In One DevOps Backend is Running 🚀")
