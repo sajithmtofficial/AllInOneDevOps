@@ -18,36 +18,54 @@ import ProjectForm from "../components/ProjectForm";
 function Dashboard() {
   const [projects, setProjects] = useState([]);
 
+  // Load projects from Django backend
   const loadProjects = () => {
     axios
       .get("http://127.0.0.1:8000/api/projects/")
       .then((response) => {
+        console.log("Projects loaded:", response.data);
         setProjects(response.data);
       })
       .catch((error) => {
-        console.error(error);
+        console.error("Error loading projects:", error);
       });
   };
 
+  // Load projects when dashboard opens
   useEffect(() => {
     loadProjects();
   }, []);
 
   return (
     <div>
+
+      {/* ================= NAVBAR ================= */}
       <Navbar />
 
-      <div style={{ display: "flex" }}>
+      {/* ================= MAIN LAYOUT ================= */}
+      <div
+        style={{
+          display: "flex",
+          minHeight: "calc(100vh - 70px)",
+        }}
+      >
+
+        {/* ================= SIDEBAR ================= */}
         <Sidebar />
 
+        {/* ================= DASHBOARD CONTENT ================= */}
         <div
           style={{
             flex: 1,
             padding: "25px",
           }}
         >
+
+          {/* Welcome Section */}
           <Welcome />
 
+
+          {/* ================= STATISTICS ================= */}
           <div
             style={{
               display: "flex",
@@ -56,6 +74,8 @@ function Dashboard() {
               flexWrap: "wrap",
             }}
           >
+
+            {/* Projects */}
             <StatsCard
               title="Projects"
               value={projects.length}
@@ -64,6 +84,7 @@ function Dashboard() {
               subtitle="Total Projects"
             />
 
+            {/* Containers */}
             <StatsCard
               title="Containers"
               value="0"
@@ -72,6 +93,7 @@ function Dashboard() {
               subtitle="Running"
             />
 
+            {/* Builds */}
             <StatsCard
               title="Builds"
               value="0"
@@ -80,6 +102,7 @@ function Dashboard() {
               subtitle="Today"
             />
 
+            {/* Deployments */}
             <StatsCard
               title="Deployments"
               value="0"
@@ -87,22 +110,57 @@ function Dashboard() {
               color="#EC4899"
               subtitle="Successful"
             />
+
           </div>
 
-          <ProjectForm refreshProjects={loadProjects} />
 
-          <h2 style={{ color: "white", marginBottom: "20px" }}>
+          {/* ================= CREATE PROJECT ================= */}
+          <ProjectForm
+            refreshProjects={loadProjects}
+          />
+
+
+          {/* ================= PROJECTS ================= */}
+          <h2
+            style={{
+              color: "white",
+              marginBottom: "20px",
+            }}
+          >
             Projects
           </h2>
 
-          {projects.map((project) => (
-            <ProjectCard
-              key={project.id}
-              project={project}
-            />
-          ))}
+
+          {/* Project List */}
+          {projects.length === 0 ? (
+
+            <div
+              style={{
+                color: "#aaa",
+                padding: "30px",
+                textAlign: "center",
+              }}
+            >
+              No projects found. Create your first project.
+            </div>
+
+          ) : (
+
+            projects.map((project) => (
+
+              <ProjectCard
+                key={project.id}
+                project={project}
+              />
+
+            ))
+
+          )}
+
         </div>
+
       </div>
+
     </div>
   );
 }

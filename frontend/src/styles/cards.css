@@ -628,7 +628,6 @@
 /* =========================================
    RESPONSIVE
    ========================================= */
-
 @media (max-width: 800px) {
 
     .github-stats,
@@ -646,4 +645,52 @@
         text-align: center;
         box-sizing: border-box;
     }
+
+}
+
+
+/* =========================================
+   CODE EDITOR BUTTON
+   ========================================= */
+
+.project-buttons .code-editor-btn {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+
+    gap: 8px !important;
+
+    background-color: #7C3AED !important;
+    color: #FFFFFF !important;
+
+    border: 1px solid #7C3AED !important;
+    border-radius: 10px !important;
+
+    padding: 10px 16px !important;
+
+    font-size: 14px !important;
+    font-weight: 600 !important;
+
+    cursor: pointer !important;
+
+    opacity: 1 !important;
+    visibility: visible !important;
+
+    transition: all 0.25s ease !important;
+}
+
+.project-buttons .code-editor-btn svg {
+    color: #FFFFFF !important;
+    fill: #FFFFFF !important;
+}
+
+.project-buttons .code-editor-btn:hover {
+    background-color: #6D28D9 !important;
+    border-color: #6D28D9 !important;
+
+    color: #FFFFFF !important;
+
+    transform: translateY(-2px);
+
+    box-shadow: 0 8px 18px rgba(124, 58, 237, 0.3);
 }

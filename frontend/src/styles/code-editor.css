@@ -1,0 +1,1135 @@
+/* =========================================================
+   ALL IN ONE DEVOPS - CODE EDITOR
+========================================================= */
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  margin: 0;
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  font-family: "Segoe UI", Arial, sans-serif;
+  background: #080b16;
+  color: #ffffff;
+}
+
+/* =========================================================
+   MAIN
+========================================================= */
+
+.code-editor-page {
+  width: 100%;
+  height: 100vh;
+  min-height: 700px;
+  overflow: hidden;
+  background: #080b16;
+  display: flex;
+  flex-direction: column;
+}
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+.editor-header {
+  height: 64px;
+  min-height: 64px;
+
+  display: flex;
+  align-items: center;
+
+  padding: 0 20px;
+
+  background: #101522;
+  border-bottom: 1px solid #252b3b;
+
+  z-index: 20;
+}
+
+.editor-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  width: 310px;
+}
+
+.editor-brand-icon {
+  width: 38px;
+  height: 38px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 9px;
+
+  background: linear-gradient(
+    135deg,
+    #6334ff,
+    #8d45ff
+  );
+
+  font-size: 22px;
+}
+
+.editor-brand-title {
+  font-size: 17px;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.editor-brand-title span {
+  color: #8d4cff;
+}
+
+.editor-brand-subtitle {
+  margin-top: 2px;
+
+  font-size: 10px;
+  color: #7f8ba5;
+}
+
+/* =========================================================
+   TOP NAV
+========================================================= */
+
+.editor-top-nav {
+  height: 100%;
+
+  display: flex;
+  align-items: center;
+
+  gap: 4px;
+}
+
+.editor-top-nav button {
+  height: 100%;
+
+  padding: 0 18px;
+
+  border: none;
+
+  background: transparent;
+
+  color: #9da8bd;
+
+  font-size: 14px;
+
+  cursor: pointer;
+
+  border-bottom: 2px solid transparent;
+}
+
+.editor-top-nav button:hover {
+  color: #ffffff;
+}
+
+.editor-top-nav .top-nav-active {
+  color: #ffffff;
+
+  border-bottom-color: #7d3cff;
+}
+
+/* =========================================================
+   HEADER ACTIONS
+========================================================= */
+
+.editor-header-actions {
+  margin-left: auto;
+
+  display: flex;
+  align-items: center;
+
+  gap: 10px;
+}
+
+.header-action {
+  height: 34px;
+
+  padding: 0 14px;
+
+  border: 1px solid #30384c;
+  border-radius: 7px;
+
+  background: #171d2b;
+
+  color: #d7dceb;
+
+  font-size: 13px;
+
+  cursor: pointer;
+}
+
+.header-action:hover {
+  background: #222a3d;
+}
+
+.run-btn {
+  background: #6334ff;
+  border-color: #6334ff;
+  color: #ffffff;
+}
+
+.run-btn:hover {
+  background: #763cff;
+}
+
+.user-avatar {
+  width: 34px;
+  height: 34px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  background: #2d3650;
+
+  color: #ffffff;
+
+  font-weight: 600;
+}
+
+/* =========================================================
+   EDITOR BODY
+========================================================= */
+
+.editor-body {
+  flex: 1;
+
+  min-height: 0;
+
+  display: flex;
+
+  overflow: hidden;
+}
+
+/* =========================================================
+   ACTIVITY BAR
+========================================================= */
+
+.activity-bar {
+  width: 52px;
+  min-width: 52px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  padding-top: 8px;
+
+  background: #0d111c;
+
+  border-right: 1px solid #252b3b;
+}
+
+.activity-bar button {
+  width: 44px;
+  height: 44px;
+
+  margin-bottom: 4px;
+
+  border: none;
+
+  background: transparent;
+
+  color: #6f7a91;
+
+  font-size: 19px;
+
+  cursor: pointer;
+
+  border-left: 2px solid transparent;
+}
+
+.activity-bar button:hover {
+  color: #ffffff;
+  background: #151b29;
+}
+
+.activity-bar .activity-active {
+  color: #ffffff;
+
+  border-left-color: #7940ff;
+
+  background: #151b29;
+}
+
+.activity-spacer {
+  flex: 1;
+}
+
+/* =========================================================
+   LEFT PANEL
+========================================================= */
+
+.left-panel {
+  width: 255px;
+  min-width: 255px;
+
+  display: flex;
+  flex-direction: column;
+
+  background: #0f1420;
+
+  border-right: 1px solid #252b3b;
+
+  overflow: hidden;
+}
+
+/* =========================================================
+   EXPLORER
+========================================================= */
+
+.panel-title {
+  height: 45px;
+  min-height: 45px;
+
+  padding: 0 15px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  color: #aeb7ca;
+
+  font-size: 11px;
+  font-weight: 700;
+
+  letter-spacing: 0.7px;
+}
+
+.panel-menu {
+  color: #68748b;
+}
+
+.workspace-title {
+  height: 35px;
+
+  display: flex;
+  align-items: center;
+
+  gap: 7px;
+
+  padding: 0 14px;
+
+  color: #cbd3e3;
+
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.file-tree {
+  padding: 0 7px;
+
+  overflow-y: auto;
+
+  max-height: 270px;
+}
+
+.folder-item {
+  height: 31px;
+
+  display: flex;
+  align-items: center;
+
+  gap: 7px;
+
+  padding: 0 8px;
+
+  color: #bfc8d9;
+
+  font-size: 12px;
+}
+
+.folder-children {
+  padding-left: 18px;
+}
+
+.file-item {
+  width: 100%;
+  height: 29px;
+
+  display: flex;
+  align-items: center;
+
+  gap: 8px;
+
+  padding: 0 9px;
+
+  border: none;
+
+  border-radius: 5px;
+
+  background: transparent;
+
+  color: #9ca8bd;
+
+  text-align: left;
+
+  font-size: 12px;
+
+  cursor: pointer;
+}
+
+.file-item:hover {
+  background: #1a2130;
+  color: #ffffff;
+}
+
+.file-active {
+  background: #242b3d;
+  color: #ffffff;
+}
+
+/* =========================================================
+   ROBOT SECTION
+========================================================= */
+
+.robot-ai-section {
+  flex: 1;
+
+  min-height: 0;
+
+  margin: 12px 12px 12px;
+
+  padding: 12px 10px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  border: 1px solid #282f42;
+
+  border-radius: 12px;
+
+  background:
+    radial-gradient(
+      circle at 50% 0%,
+      rgba(103, 58, 220, 0.13),
+      transparent 60%
+    ),
+    #111725;
+
+  overflow: hidden;
+}
+
+.robot-image-container {
+  width: 100%;
+  height: 145px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  overflow: hidden;
+}
+
+.robot-image {
+  width: 145px;
+  height: 145px;
+
+  object-fit: contain;
+
+  display: block;
+}
+
+.robot-title {
+  margin-top: 2px;
+
+  color: #ffffff;
+
+  font-size: 14px;
+  font-weight: 700;
+
+  text-align: center;
+}
+
+.robot-subtitle {
+  margin-top: 4px;
+  margin-bottom: 10px;
+
+  color: #78849b;
+
+  font-size: 9px;
+
+  text-align: center;
+}
+
+.robot-action {
+  width: 100%;
+
+  min-height: 32px;
+
+  margin-bottom: 7px;
+
+  display: flex;
+  align-items: center;
+
+  gap: 8px;
+
+  padding: 0 10px;
+
+  border: 1px solid #30384d;
+
+  border-radius: 7px;
+
+  background: #171e2d;
+
+  color: #cbd3e4;
+
+  font-size: 10px;
+
+  cursor: pointer;
+
+  transition: 0.2s;
+}
+
+.robot-action:hover {
+  background: #292044;
+
+  border-color: #7542ed;
+
+  color: #ffffff;
+
+  transform: translateY(-1px);
+}
+
+.robot-action span:first-child {
+  font-size: 13px;
+}
+
+/* =========================================================
+   CENTER EDITOR
+========================================================= */
+
+.editor-center {
+  flex: 1;
+
+  min-width: 0;
+  min-height: 0;
+
+  display: flex;
+  flex-direction: column;
+
+  background: #080b14;
+}
+
+/* =========================================================
+   TABS
+========================================================= */
+
+.editor-tabs {
+  height: 43px;
+  min-height: 43px;
+
+  display: flex;
+  align-items: center;
+
+  background: #101520;
+
+  border-bottom: 1px solid #252b3b;
+}
+
+.editor-tab {
+  height: 100%;
+
+  display: flex;
+  align-items: center;
+
+  gap: 8px;
+
+  padding: 0 14px;
+
+  color: #8994aa;
+
+  font-size: 12px;
+}
+
+.active-tab {
+  color: #ffffff;
+
+  background: #080b14;
+
+  border-top: 2px solid #7840ff;
+}
+
+.tab-close {
+  margin-left: 8px;
+
+  color: #707b90;
+
+  font-size: 16px;
+}
+
+.editor-tab-space {
+  flex: 1;
+}
+
+.language-selector {
+  padding-right: 12px;
+}
+
+.language-selector select {
+  padding: 5px 8px;
+
+  border: 1px solid #30384c;
+  border-radius: 5px;
+
+  background: #171d2a;
+
+  color: #aeb9cc;
+
+  font-size: 11px;
+
+  outline: none;
+}
+
+/* =========================================================
+   MONACO
+========================================================= */
+
+.monaco-wrapper {
+  flex: 1;
+
+  min-height: 0;
+
+  overflow: hidden;
+}
+
+/* =========================================================
+   TERMINAL
+========================================================= */
+
+.terminal-panel {
+  height: 190px;
+  min-height: 190px;
+
+  background: #090d15;
+
+  border-top: 1px solid #252b3b;
+}
+
+.terminal-header {
+  height: 38px;
+
+  display: flex;
+  align-items: center;
+
+  border-bottom: 1px solid #252b3b;
+
+  background: #101520;
+}
+
+.terminal-tabs {
+  display: flex;
+  height: 100%;
+}
+
+.terminal-tabs button {
+  padding: 0 15px;
+
+  border: none;
+
+  background: transparent;
+
+  color: #727e94;
+
+  font-size: 10px;
+
+  cursor: pointer;
+}
+
+.terminal-tabs .terminal-tab-active {
+  color: #ffffff;
+
+  border-bottom: 2px solid #7c42ff;
+}
+
+.terminal-close {
+  margin-left: auto;
+
+  margin-right: 12px;
+
+  border: none;
+
+  background: transparent;
+
+  color: #727e94;
+
+  font-size: 18px;
+
+  cursor: pointer;
+}
+
+.terminal-close:hover {
+  color: #ffffff;
+}
+
+.terminal-content {
+  height: calc(100% - 38px);
+
+  padding: 12px 16px;
+
+  overflow: auto;
+}
+
+.terminal-content pre {
+  margin: 0;
+
+  color: #aeb9c9;
+
+  font-family: Consolas, "Courier New", monospace;
+
+  font-size: 12px;
+
+  line-height: 1.6;
+
+  white-space: pre-wrap;
+}
+
+/* =========================================================
+   RIGHT AI PANEL
+========================================================= */
+
+.right-ai-panel {
+  width: 310px;
+  min-width: 310px;
+
+  display: flex;
+  flex-direction: column;
+
+  background: #0f1420;
+
+  border-left: 1px solid #252b3b;
+}
+
+/* =========================================================
+   AI HEADER
+========================================================= */
+
+.ai-panel-header {
+  height: 64px;
+  min-height: 64px;
+
+  padding: 0 15px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  border-bottom: 1px solid #252b3b;
+}
+
+.ai-panel-title {
+  display: flex;
+  align-items: center;
+
+  gap: 10px;
+}
+
+.ai-icon {
+  width: 34px;
+  height: 34px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 8px;
+
+  background: #292044;
+
+  font-size: 18px;
+}
+
+.ai-panel-title strong {
+  display: block;
+
+  color: #ffffff;
+
+  font-size: 13px;
+}
+
+.ai-panel-title small {
+  display: block;
+
+  margin-top: 2px;
+
+  color: #727e94;
+
+  font-size: 9px;
+}
+
+.ai-menu {
+  border: none;
+
+  background: transparent;
+
+  color: #6f7a91;
+
+  cursor: pointer;
+}
+
+/* =========================================================
+   AI STATUS
+========================================================= */
+
+.ai-status {
+  height: 34px;
+
+  display: flex;
+  align-items: center;
+
+  gap: 7px;
+
+  padding: 0 15px;
+
+  color: #7f8ba2;
+
+  font-size: 10px;
+
+  border-bottom: 1px solid #202638;
+}
+
+.status-dot {
+  width: 7px;
+  height: 7px;
+
+  border-radius: 50%;
+
+  background: #43d17d;
+
+  box-shadow: 0 0 8px rgba(67, 209, 125, 0.7);
+}
+
+/* =========================================================
+   AI CHAT
+========================================================= */
+
+.ai-chat {
+  flex: 1;
+
+  min-height: 0;
+
+  padding: 15px;
+
+  overflow-y: auto;
+}
+
+.ai-message {
+  display: flex;
+
+  gap: 9px;
+}
+
+.message-avatar {
+  width: 30px;
+  height: 30px;
+
+  min-width: 30px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 7px;
+
+  background: #28203f;
+
+  font-size: 15px;
+}
+
+.message-content strong {
+  color: #ffffff;
+
+  font-size: 11px;
+}
+
+.message-content p {
+  margin: 6px 0 0;
+
+  color: #9ba6ba;
+
+  font-size: 11px;
+
+  line-height: 1.5;
+}
+
+.ai-code-card {
+  margin-top: 15px;
+
+  border: 1px solid #292f40;
+
+  border-radius: 8px;
+
+  overflow: hidden;
+
+  background: #0a0e17;
+}
+
+.ai-code-header {
+  height: 34px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 0 10px;
+
+  background: #141a27;
+
+  color: #8e99ad;
+
+  font-size: 10px;
+}
+
+.ai-code-header button {
+  border: none;
+
+  background: transparent;
+
+  color: #8d4cff;
+
+  font-size: 10px;
+
+  cursor: pointer;
+}
+
+.ai-code-card pre {
+  margin: 0;
+
+  padding: 12px;
+
+  color: #aebbd0;
+
+  font-family: Consolas, "Courier New", monospace;
+
+  font-size: 10px;
+
+  line-height: 1.5;
+}
+
+/* =========================================================
+   QUICK ACTIONS
+========================================================= */
+
+.quick-actions {
+  padding: 12px 15px;
+
+  border-top: 1px solid #252b3b;
+}
+
+.quick-title {
+  margin-bottom: 8px;
+
+  color: #7f8ba2;
+
+  font-size: 10px;
+
+  text-transform: uppercase;
+}
+
+.quick-actions button {
+  width: 100%;
+
+  height: 31px;
+
+  margin-bottom: 6px;
+
+  border: 1px solid #2b3346;
+
+  border-radius: 6px;
+
+  background: #151b28;
+
+  color: #aeb9cb;
+
+  font-size: 10px;
+
+  text-align: left;
+
+  padding: 0 10px;
+
+  cursor: pointer;
+}
+
+.quick-actions button:hover {
+  background: #241d3c;
+
+  border-color: #7541e9;
+
+  color: #ffffff;
+}
+
+/* =========================================================
+   AI INPUT
+========================================================= */
+
+.ai-input-area {
+  position: relative;
+
+  padding: 12px 15px 15px;
+}
+
+.ai-input-area textarea {
+  width: 100%;
+
+  resize: none;
+
+  padding: 10px 38px 10px 10px;
+
+  border: 1px solid #30384b;
+
+  border-radius: 8px;
+
+  outline: none;
+
+  background: #0a0e17;
+
+  color: #ffffff;
+
+  font-family: inherit;
+
+  font-size: 10px;
+}
+
+.ai-input-area textarea::placeholder {
+  color: #59657b;
+}
+
+.ai-input-area textarea:focus {
+  border-color: #7140dd;
+}
+
+.send-ai {
+  position: absolute;
+
+  right: 22px;
+  bottom: 22px;
+
+  width: 27px;
+  height: 27px;
+
+  border: none;
+
+  border-radius: 6px;
+
+  background: #6939e8;
+
+  color: #ffffff;
+
+  cursor: pointer;
+}
+
+/* =========================================================
+   FOOTER
+========================================================= */
+
+.editor-footer {
+  height: 25px;
+  min-height: 25px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 0 12px;
+
+  background: #171d2b;
+
+  color: #77839a;
+
+  font-size: 9px;
+
+  border-top: 1px solid #252b3b;
+}
+
+/* =========================================================
+   SCROLLBARS
+========================================================= */
+
+::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0b0f18;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #30384b;
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #48536b;
+}
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 1200px) {
+  .right-ai-panel {
+    width: 270px;
+    min-width: 270px;
+  }
+
+  .left-panel {
+    width: 225px;
+    min-width: 225px;
+  }
+
+  .editor-brand {
+    width: 250px;
+  }
+}
+
+@media (max-width: 950px) {
+  .right-ai-panel {
+    display: none;
+  }
+
+  .left-panel {
+    width: 230px;
+    min-width: 230px;
+  }
+}
+
+@media (max-width: 700px) {
+  .left-panel {
+    display: none;
+  }
+
+  .activity-bar {
+    width: 45px;
+    min-width: 45px;
+  }
+
+  .editor-top-nav {
+    display: none;
+  }
+
+  .editor-brand {
+    width: auto;
+  }
+
+  .editor-brand-subtitle {
+    display: none;
+  }
+
+  .terminal-panel {
+    height: 160px;
+  }
+}

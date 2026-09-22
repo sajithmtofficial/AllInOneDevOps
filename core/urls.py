@@ -1,4 +1,5 @@
 from django.urls import path
+
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
     TokenRefreshView,
@@ -11,9 +12,26 @@ from .views import (
     github_info,
 )
 
+# DevOps API functions
+from .devops_api import (
+    run_code,
+    stop_code,
+    ai_assistant,
+    ai_health,
+)
+
 
 urlpatterns = [
-    path("projects/", ProjectListCreateView.as_view(), name="projects"),
+
+    # ========================================================
+    # PROJECTS
+    # ========================================================
+
+    path(
+        "projects/",
+        ProjectListCreateView.as_view(),
+        name="projects",
+    ),
 
     path(
         "projects/<int:pk>/",
@@ -21,9 +39,21 @@ urlpatterns = [
         name="project-detail",
     ),
 
-    path("register/", RegisterView.as_view(), name="register"),
+    # ========================================================
+    # AUTHENTICATION
+    # ========================================================
 
-    path("login/", TokenObtainPairView.as_view(), name="login"),
+    path(
+        "register/",
+        RegisterView.as_view(),
+        name="register",
+    ),
+
+    path(
+        "login/",
+        TokenObtainPairView.as_view(),
+        name="login",
+    ),
 
     path(
         "token/refresh/",
@@ -31,5 +61,40 @@ urlpatterns = [
         name="token_refresh",
     ),
 
-    path("github-info/", github_info, name="github_info"),
+    # ========================================================
+    # GITHUB
+    # ========================================================
+
+    path(
+        "github-info/",
+        github_info,
+        name="github_info",
+    ),
+
+    # ========================================================
+    # CODE EXECUTION
+    # ========================================================
+
+    path(
+        "run-code/",
+        run_code,
+        name="run_code",
+    ),
+
+    path(
+        "stop-code/",
+        stop_code,
+        name="stop_code",
+    ),
+
+    # ========================================================
+    # AI ASSISTANT
+    # ========================================================
+
+    path(
+        "ai-assistant/",
+        ai_assistant,
+        name="ai_assistant",
+    ),
+    path("ai-health/", ai_health, name="ai_health"),
 ]
