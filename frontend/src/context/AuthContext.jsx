@@ -1,6 +1,6 @@
 import { createContext, useState } from "react";
 
-export const AuthContext = createContext();
+export const AuthContext = createContext(null);
 
 function AuthProvider({ children }) {
   const [token, setToken] = useState(
@@ -14,6 +14,7 @@ function AuthProvider({ children }) {
 
   const logout = () => {
     localStorage.removeItem("access");
+    localStorage.removeItem("username");
     setToken(null);
   };
 

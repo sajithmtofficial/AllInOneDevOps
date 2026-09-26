@@ -46,7 +46,6 @@
 .project-form input,
 .project-form textarea,
 .project-form select {
-
     width: 100%;
 
     padding: 14px;
@@ -66,6 +65,8 @@
     outline: none;
 
     transition: .3s;
+
+    box-sizing: border-box;
 }
 
 .project-form textarea {
@@ -76,7 +77,6 @@
 .project-form input:focus,
 .project-form textarea:focus,
 .project-form select:focus {
-
     border-color: #7C3AED;
 
     box-shadow: 0 0 12px rgba(124,58,237,.4);
@@ -87,7 +87,6 @@
 =========================================== */
 
 .project-form-buttons {
-
     display: flex;
 
     gap: 15px;
@@ -96,7 +95,6 @@
 }
 
 .create-btn {
-
     flex: 1;
 
     background: #7C3AED;
@@ -119,14 +117,12 @@
 }
 
 .create-btn:hover {
-
     background: #6D28D9;
 
     transform: translateY(-2px);
 }
 
 .cancel-btn {
-
     flex: 1;
 
     background: #374151;
@@ -149,7 +145,6 @@
 }
 
 .cancel-btn:hover {
-
     background: #4B5563;
 
     transform: translateY(-2px);
@@ -160,7 +155,6 @@
 =========================================== */
 
 .new-project-btn {
-
     background: #7C3AED;
 
     color: white;
@@ -183,7 +177,6 @@
 }
 
 .new-project-btn:hover {
-
     background: #6D28D9;
 
     transform: translateY(-3px);
@@ -196,7 +189,6 @@
 =========================================== */
 
 .stats-card {
-
     width: 230px;
 
     padding: 25px;
@@ -221,14 +213,12 @@
 }
 
 .stats-card:hover {
-
     transform: translateY(-10px);
 
     box-shadow: 0 25px 45px rgba(124,58,237,.35);
 }
 
 .stats-header {
-
     display: flex;
 
     justify-content: space-between;
@@ -237,28 +227,24 @@
 }
 
 .stats-icon {
-
     font-size: 34px;
 
     color: #7C3AED;
 }
 
 .trend {
-
     color: #22C55E;
 
     font-weight: bold;
 }
 
 .stats-card h3 {
-
     color: #94A3B8;
 
     margin-top: 20px;
 }
 
 .stats-card h1 {
-
     color: white;
 
     font-size: 48px;
@@ -267,7 +253,6 @@
 }
 
 .stats-card p {
-
     color: #64748B;
 }
 
@@ -276,7 +261,6 @@
 =========================================== */
 
 .project-card {
-
     margin-top: 30px;
 
     padding: 30px;
@@ -295,14 +279,12 @@
 }
 
 .project-card:hover {
-
     transform: translateY(-5px);
 
     box-shadow: 0 20px 45px rgba(0,0,0,.35);
 }
 
 .project-header {
-
     display: flex;
 
     justify-content: space-between;
@@ -313,12 +295,10 @@
 }
 
 .project-header h2 {
-
     color: white;
 }
 
 .status {
-
     background: #22C55E;
 
     color: white;
@@ -333,52 +313,263 @@
 }
 
 .project-card p {
-
     color: #CBD5E1;
 
     margin-bottom: 20px;
 }
 
-.project-info{
-    color:white;
-    margin-bottom:20px;
+/* ===========================================
+   PROJECT INFORMATION
+=========================================== */
+
+.project-info {
+    color: white;
+
+    margin-bottom: 20px;
 }
 
-.project-info p{
-    margin:8px 0;
+.info-row {
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    margin-bottom: 10px;
+
+    line-height: 1.5;
 }
 
-.project-info a{
-    color:#60A5FA;
-    text-decoration:none;
-    font-weight:600;
+.info-label {
+    color: #94A3B8;
+
+    font-weight: 600;
 }
 
-.project-info a:hover{
-    text-decoration:underline;
+.info-value {
+    color: #F8FAFC;
 }
+
+.github-link {
+    color: #A78BFA;
+
+    text-decoration: none;
+
+    transition: .25s;
+}
+
+.github-link:hover {
+    color: #C4B5FD;
+
+    text-decoration: underline;
+}
+
+/* ===========================================
+   GITHUB SECTION
+=========================================== */
+
+.github-section {
+    margin-top: 25px;
+
+    padding: 22px;
+
+    border-radius: 16px;
+
+    background: rgba(15,23,42,.65);
+
+    border: 1px solid rgba(124,58,237,.25);
+
+    box-shadow: inset 0 0 25px rgba(124,58,237,.04);
+}
+
+.github-section-header {
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    gap: 15px;
+
+    margin-bottom: 20px;
+}
+
+.github-repository-name {
+    color: #F8FAFC;
+
+    font-size: 20px;
+
+    font-weight: 700;
+}
+
+.github-view-btn {
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    padding: 9px 16px;
+
+    border-radius: 9px;
+
+    background: #7C3AED;
+
+    color: white;
+
+    text-decoration: none;
+
+    font-weight: 600;
+
+    transition: .25s;
+}
+
+.github-view-btn:hover {
+    background: #6D28D9;
+
+    transform: translateY(-2px);
+}
+
+/* ===========================================
+   GITHUB LOADING / ERROR
+=========================================== */
+
+.github-loading {
+    color: #94A3B8;
+
+    padding: 15px 0;
+}
+
+.github-error {
+    color: #F87171;
+
+    padding: 15px 0;
+}
+
+/* ===========================================
+   GITHUB STATISTICS
+=========================================== */
+
+.github-stats {
+    display: flex;
+
+    gap: 15px;
+
+    flex-wrap: wrap;
+
+    margin-bottom: 22px;
+}
+
+.github-stat {
+    flex: 1;
+
+    min-width: 120px;
+
+    padding: 16px;
+
+    border-radius: 12px;
+
+    background: rgba(255,255,255,.04);
+
+    border: 1px solid rgba(255,255,255,.07);
+
+    color: #F8FAFC;
+}
+
+.stat-icon {
+    color: #A78BFA;
+
+    font-size: 18px;
+
+    margin-right: 8px;
+}
+
+.fork-icon {
+    color: #60A5FA;
+}
+
+.stat-label {
+    color: #CBD5E1;
+
+    font-size: 14px;
+}
+
+/* ===========================================
+   GITHUB DETAILS
+=========================================== */
+
+.github-details {
+    display: grid;
+
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+
+    gap: 12px;
+}
+
+.github-detail {
+    padding: 12px;
+
+    border-radius: 10px;
+
+    background: rgba(255,255,255,.03);
+
+    color: #CBD5E1;
+
+    border: 1px solid rgba(255,255,255,.04);
+}
+
+.detail-symbol {
+    color: #A78BFA;
+
+    margin-right: 7px;
+}
+
+/* ===========================================
+   PROJECT BUTTONS
+=========================================== */
+
 .project-buttons {
     display: flex;
+
     gap: 12px;
+
+    margin-top: 20px;
+
+    flex-wrap: wrap;
 }
 
 .project-buttons button {
     padding: 10px 18px;
+
     border: none;
+
     border-radius: 10px;
+
     color: white;
+
     font-weight: 600;
+
     cursor: pointer;
+
     transition: .3s;
 }
 
 .project-buttons button:hover {
     transform: translateY(-2px);
+
     filter: brightness(1.1);
 }
 
 .open-btn {
     background: #2563EB;
+}
+
+.code-editor-btn {
+    background: #8B5CF6;
+}
+
+.code-editor-btn:hover {
+    background: #7C3AED;
 }
 
 .edit-btn {
@@ -388,309 +579,42 @@
 .delete-btn {
     background: #EF4444;
 }
-/* =========================================
-   PROFESSIONAL GITHUB SECTION
-   ========================================= */
 
-.github-section {
-    margin-top: 22px;
-    padding: 20px;
-    background: rgba(15, 23, 42, 0.72);
-    border: 1px solid rgba(148, 163, 184, 0.15);
-    border-radius: 14px;
-}
-
-.github-section-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 15px;
-    margin-bottom: 18px;
-}
-
-.github-section-header h3 {
-    margin: 0;
-    color: #f8fafc;
-    font-size: 17px;
-    font-weight: 700;
-}
-
-.github-repository-name {
-    display: block;
-    margin-top: 5px;
-    color: #94a3b8;
-    font-size: 13px;
-}
-
-.github-view-btn {
-    padding: 8px 13px;
-    background: rgba(96, 165, 250, 0.12);
-    border: 1px solid rgba(96, 165, 250, 0.3);
-    border-radius: 8px;
-    color: #60a5fa;
-    text-decoration: none;
-    font-size: 12px;
-    font-weight: 600;
-    white-space: nowrap;
-    transition: 0.25s;
-}
-
-.github-view-btn:hover {
-    background: rgba(96, 165, 250, 0.2);
-    transform: translateY(-1px);
-}
-
-
-/* =========================================
-   GITHUB STATISTICS
-   ========================================= */
-
-.github-stats {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 12px;
-    margin-bottom: 14px;
-}
-
-.github-stat {
-    min-height: 72px;
-    padding: 14px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-
-    background: rgba(30, 41, 59, 0.75);
-    border: 1px solid rgba(148, 163, 184, 0.12);
-    border-radius: 10px;
-
-    box-sizing: border-box;
-}
-
-.stat-icon {
-    flex-shrink: 0;
-    font-size: 18px;
-    color: #fbbf24;
-}
-
-.fork-icon {
-    width: 18px;
-    text-align: center;
-    font-size: 22px;
-    color: #60a5fa;
-}
-
-.github-stat div:last-child {
-    display: flex;
-    flex-direction: column;
-    gap: 3px;
-    min-width: 0;
-}
-
-.stat-label {
-    color: #94a3b8;
-    font-size: 12px;
-}
-
-.github-stat strong {
-    color: #f8fafc;
-    font-size: 16px;
-    font-weight: 700;
-}
-
-
-/* =========================================
-   GITHUB DETAILS
-   ========================================= */
-
-.github-details {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 12px;
-}
-
-.github-detail {
-    min-height: 62px;
-    padding: 12px 14px;
-
-    display: flex;
-    align-items: center;
-    gap: 11px;
-
-    background: rgba(30, 41, 59, 0.45);
-    border-radius: 10px;
-
-    box-sizing: border-box;
-}
-
-.github-detail > svg {
-    flex-shrink: 0;
-    color: #94a3b8;
-    font-size: 15px;
-}
-
-.detail-symbol {
-    width: 15px;
-    text-align: center;
-    color: #94a3b8;
-    font-size: 15px;
-    flex-shrink: 0;
-}
-
-.github-detail div {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-    min-width: 0;
-}
-
-.github-detail span:not(.detail-symbol) {
-    color: #94a3b8;
-    font-size: 11px;
-}
-
-.github-detail strong {
-    color: #e2e8f0;
-    font-size: 13px;
-
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-
-/* =========================================
-   LOADING & ERROR
-   ========================================= */
-
-.github-loading {
-    padding: 15px;
-    text-align: center;
-    color: #94a3b8;
-    font-size: 13px;
-}
-
-.github-error {
-    padding: 12px;
-    background: rgba(239, 68, 68, 0.08);
-    border: 1px solid rgba(239, 68, 68, 0.2);
-    border-radius: 8px;
-    color: #fca5a5;
-    font-size: 13px;
-}
-
-
-/* =========================================
-   GITHUB LINK
-   ========================================= */
-
-.github-link {
-    color: #60a5fa;
-    text-decoration: none;
-    font-weight: 600;
-}
-
-.github-link:hover {
-    text-decoration: underline;
-}
-
-
-/* =========================================
-   PROJECT INFO ALIGNMENT
-   ========================================= */
-
-.project-info {
-    display: flex;
-    flex-direction: column;
-    gap: 9px;
-}
-
-.info-row {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 20px;
-    min-height: 24px;
-}
-
-.info-label {
-    color: #94a3b8;
-    font-size: 14px;
-    font-weight: 600;
-}
-
-.info-value {
-    color: #e2e8f0;
-    font-size: 14px;
-    text-align: right;
-}
-
-
-/* =========================================
+/* ===========================================
    RESPONSIVE
-   ========================================= */
-@media (max-width: 800px) {
+=========================================== */
 
-    .github-stats,
+@media (max-width: 768px) {
+
+    .project-form {
+        width: calc(100% - 30px);
+
+        max-width: 550px;
+
+        padding: 22px;
+    }
+
+    .github-section-header {
+        flex-direction: column;
+
+        align-items: flex-start;
+    }
+
+    .github-stats {
+        flex-direction: column;
+    }
+
     .github-details {
         grid-template-columns: 1fr;
     }
 
-    .github-section-header {
-        align-items: flex-start;
-        flex-direction: column;
+    .project-buttons {
+        flex-wrap: wrap;
     }
 
-    .github-view-btn {
-        width: 100%;
-        text-align: center;
-        box-sizing: border-box;
+    .project-buttons button {
+        flex: 1;
+
+        min-width: 120px;
     }
-
-}
-
-
-/* =========================================
-   CODE EDITOR BUTTON
-   ========================================= */
-
-.project-buttons .code-editor-btn {
-    display: inline-flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-
-    gap: 8px !important;
-
-    background-color: #7C3AED !important;
-    color: #FFFFFF !important;
-
-    border: 1px solid #7C3AED !important;
-    border-radius: 10px !important;
-
-    padding: 10px 16px !important;
-
-    font-size: 14px !important;
-    font-weight: 600 !important;
-
-    cursor: pointer !important;
-
-    opacity: 1 !important;
-    visibility: visible !important;
-
-    transition: all 0.25s ease !important;
-}
-
-.project-buttons .code-editor-btn svg {
-    color: #FFFFFF !important;
-    fill: #FFFFFF !important;
-}
-
-.project-buttons .code-editor-btn:hover {
-    background-color: #6D28D9 !important;
-    border-color: #6D28D9 !important;
-
-    color: #FFFFFF !important;
-
-    transform: translateY(-2px);
-
-    box-shadow: 0 8px 18px rgba(124, 58, 237, 0.3);
 }
