@@ -168,23 +168,40 @@ def stop_code(request):
 # 3. EXTRACT CODE FROM AI RESPONSE
 # ============================================================
 
-def extract_code(text):
-    """Extract the first fenced code block from an Ollama response."""
+def extract_code(text, language="plaintext"):
+    """Extract code from an Ollama response for any supported language."""
     if not text:
         return ""
 
-    match = re.search(r"```(?:python|py|javascript|js|text)?\s*\n?(.*?)```", text, re.DOTALL | re.IGNORECASE)
+    # Prefer a fenced code block with any language label.
+    match = re.search(r"```[^\n]*\n(.*?)```", text, re.DOTALL)
     if match:
         return match.group(1).strip()
 
-    # If the model followed the instruction and returned only code,
-    # use the whole response. Avoid treating normal prose as code.
-    lines = text.strip().splitlines()
-    if lines and not any(
-        phrase in text.lower()
-        for phrase in ["here is", "the corrected", "i fixed", "explanation:"]
-    ):
-        return text.strip()
+    # Also support an opening fence followed by code on the same line.
+    match = re.search(r"```[^\n]*\s*(.*?)```", text, re.DOTALL)
+    if match:
+        return match.group(1).strip()
+
+    stripped = text.strip()
+    if not stripped:
+        return ""
+
+    # If the model returned only code without fences, accept it unless
+    # it clearly looks like explanatory prose.
+    lower = stripped.lower()
+    prose_markers = (
+        "here is",
+        "here's",
+        "the corrected code",
+        "the corrected",
+        "i fixed",
+        "i have fixed",
+        "explanation:",
+    )
+
+    if not any(marker in lower for marker in prose_markers):
+        return stripped
 
     return ""
 
@@ -193,72 +210,126 @@ def extract_code(text):
 # 4. BUILD A SMALL, FAST PROMPT
 # ============================================================
 
-def build_prompt(message, code, action):
-    if action == "fix":
-        return f"""You are a fast Python debugger.
-Find syntax, runtime, and obvious logic errors in the code.
-Return ONLY the complete corrected Python code inside exactly one ```python``` block.
-Do not explain. Do not add commentary before or after the code block.
+def build_prompt(message, code, language, action, terminal_output=""):
+    """Build a language-aware prompt for the local Ollama model."""
+    language = language or "plaintext"
+    compiler_context = terminal_output or "No compiler/runtime output was provided."
 
-User request:
+    if action == "fix":
+        return f"""You are an expert {language} programmer and debugger.
+
+SELECTED LANGUAGE: {language}
+
+Your task is to repair the COMPLETE program.
+
+IMPORTANT RULES:
+1. Keep the EXACT SAME programming language: {language}.
+2. NEVER convert Java, C, or C++ code into Python.
+3. Fix ALL errors you can identify, not just the first error.
+4. Use the compiler/runtime output below as evidence for the actual error.
+5. Return the COMPLETE corrected source file from the first line to the last line.
+6. Do NOT return only the changed lines.
+7. Do NOT replace a large program with a tiny example.
+8. Do NOT omit functions, loops, classes, includes/imports, variables, or correct code.
+9. Preserve the original program's purpose, structure, and behavior wherever possible.
+10. Make the minimum necessary changes to correct the program.
+11. Check variable scopes carefully, especially repeated loop variables.
+12. Check brackets, semicolons, declarations, types, includes/imports, and syntax.
+13. Before answering, mentally compile/check the entire corrected program.
+14. Return ONLY ONE complete corrected code block.
+15. Put the language name on the code fence, such as ```java, ```c, or ```cpp.
+16. Do not put explanations inside the code block or after it.
+
+USER REQUEST:
 {message}
 
-Code:
-```python
+COMPILER/RUNTIME OUTPUT:
+```text
+{compiler_context}
+```
+
+CURRENT COMPLETE {language} SOURCE CODE:
+```{language}
 {code}
-```"""
+```
+
+Now return the COMPLETE corrected {language} source code."""
 
     if action == "generate":
-        return f"""You are a fast Python coding assistant.
-Generate clean working Python code for the request.
-Return the code first inside one ```python``` block, then one short sentence.
+        return f"""You are an expert {language} programming assistant.
+
+Selected programming language: {language}
+
+Generate working {language} code.
+
+Rules:
+- Use ONLY {language}.
+- Do not convert the solution to Python unless the selected language is Python.
+- Return complete source code in one fenced code block.
 
 Request:
 {message}
 
 Current code if relevant:
-```python
+```{language}
 {code}
 ```"""
 
     if action == "refactor":
-        return f"""You are a fast Python code refactoring assistant.
-Improve the supplied code while preserving its behavior.
-Return the improved code inside one ```python``` block and keep the explanation to one short sentence.
+        return f"""You are an expert {language} code refactoring assistant.
+
+Selected programming language: {language}
+
+Improve the COMPLETE program while preserving its behavior.
+
+Rules:
+- Keep the EXACT same language: {language}.
+- Return the COMPLETE source code.
+- Do not return only changed lines.
+- Do not convert it to Python.
+- Do not remove working sections of the program.
+- Return the result in one fenced code block.
 
 Request:
 {message}
 
 Code:
-```python
+```{language}
 {code}
 ```"""
 
     if action == "explain":
-        return f"""Explain this Python code simply and briefly.
-Mention the main purpose, important variables/functions, and any obvious error.
-Keep the answer under 180 words.
+        return f"""You are an expert {language} programming assistant.
+
+Explain this {language} code simply and briefly.
+Mention the main purpose, important variables/functions, and obvious errors.
 
 Request:
 {message}
 
 Code:
-```python
+```{language}
 {code}
-```"""
+```
+
+Keep the answer under 180 words."""
 
     return f"""You are the coding assistant inside an All-in-One DevOps Platform.
-Answer the user's programming question clearly and briefly.
-Prefer practical Python/Django/React/Git/Docker/DevOps guidance.
-Keep the answer under 180 words.
+
+Selected programming language: {language}
+
+Answer the programming question clearly.
+When modifying code, keep the same selected language.
 
 Question:
 {message}
 
-Current code:
-```text
+Current {language} code:
+```{language}
 {code}
-```"""
+```
+
+Keep the answer concise."""
 
 
 # ============================================================
@@ -273,6 +344,8 @@ def ai_assistant(request):
 
         message = data.get("message", "").strip()
         code = data.get("code", "")
+        language = data.get("language", "python").strip().lower()
+        terminal_output = data.get("terminal_output", "").strip()
         action = data.get("action", "chat")
 
         if not message and not code:
@@ -281,10 +354,14 @@ def ai_assistant(request):
                 "reply": "Please enter a question or provide some code."
             }, status=400)
 
-        prompt = build_prompt(message, code, action)
+        prompt = build_prompt(message, code, language, action, terminal_output)
 
-        # Smaller output = noticeably faster response for local AI.
-        num_predict = 500 if action in ("fix", "generate", "refactor") else 300
+        # Large programs need enough output tokens to return the COMPLETE file.
+        # The old 500-token limit caused large Java/C/C++ files to be truncated.
+        if action in ("fix", "generate", "refactor"):
+            num_predict = max(4096, min(12000, (len(code) // 2) + 1500))
+        else:
+            num_predict = 500
 
         response = requests.post(
             OLLAMA_URL,
@@ -296,6 +373,7 @@ def ai_assistant(request):
                 "options": {
                     "temperature": 0.1,
                     "num_predict": num_predict,
+                    "num_ctx": 32768,
                 },
             },
             timeout=90,
@@ -313,12 +391,12 @@ def ai_assistant(request):
 
         corrected_code = ""
         if action in ("fix", "generate", "refactor"):
-            corrected_code = extract_code(reply)
+            corrected_code = extract_code(reply, language)
 
         # Fix mode is intentionally short because the actual code is
         # displayed separately in the React UI for easy copying.
         if action == "fix" and corrected_code:
-            clean_reply = 'I found the error and generated the corrected code below. Click "📋 Paste to Editor" to insert it into the editor.'
+            clean_reply = "I found the problem and generated the corrected code below."
         else:
             clean_reply = reply
 
@@ -328,6 +406,7 @@ def ai_assistant(request):
             "corrected_code": corrected_code,
             "source": "ollama",
             "model": OLLAMA_MODEL,
+            "language": language,
         })
 
     except requests.exceptions.ConnectionError:
