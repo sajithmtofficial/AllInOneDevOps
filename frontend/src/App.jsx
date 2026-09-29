@@ -4,6 +4,8 @@ import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import CodeEditor from "./pages/CodeEditor";
 import ProjectDetails from "./pages/ProjectDetails";
+import CICD from "./pages/CICD";
+
 import ProtectedRoute from "./components/ProtectedRoute";
 
 function App() {
@@ -38,6 +40,16 @@ function App() {
         element={
           <ProtectedRoute>
             <CodeEditor />
+          </ProtectedRoute>
+        }
+      />
+
+      {/* CI/CD */}
+      <Route
+        path="/cicd"
+        element={
+          <ProtectedRoute>
+            <CICD />
           </ProtectedRoute>
         }
       />

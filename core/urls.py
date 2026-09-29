@@ -18,10 +18,22 @@ from .devops_api import (
     ai_assistant,
 )
 
-from .execute_views import execute_code, stop_code as stop_execution
+from .execute_views import (
+    execute_code,
+    stop_code as stop_execution,
+)
+
+from .pipeline_views import (
+    pipeline_run,
+    pipeline_status,
+)
 
 
 urlpatterns = [
+    # =================================================
+    # PROJECTS
+    # =================================================
+
     path(
         "projects/",
         ProjectListCreateView.as_view(),
@@ -33,6 +45,10 @@ urlpatterns = [
         ProjectDetailView.as_view(),
         name="project-detail",
     ),
+
+    # =================================================
+    # AUTHENTICATION
+    # =================================================
 
     path(
         "register/",
@@ -52,13 +68,20 @@ urlpatterns = [
         name="token_refresh",
     ),
 
+    # =================================================
+    # GITHUB
+    # =================================================
+
     path(
         "github-info/",
         github_info,
         name="github_info",
     ),
 
-    # Existing code execution endpoint.
+    # =================================================
+    # EXISTING CODE RUNNER
+    # =================================================
+
     path(
         "run-code/",
         run_code,
@@ -71,14 +94,20 @@ urlpatterns = [
         name="stop_code",
     ),
 
-    # Existing Ollama AI assistant.
+    # =================================================
+    # OLLAMA AI ASSISTANT
+    # =================================================
+
     path(
         "ai-assistant/",
         ai_assistant,
         name="ai_assistant",
     ),
 
-    # New isolated multi-language Docker runner.
+    # =================================================
+    # MULTI-LANGUAGE DOCKER EXECUTION
+    # =================================================
+
     path(
         "execute/",
         execute_code,
@@ -89,5 +118,21 @@ urlpatterns = [
         "stop-execution/",
         stop_execution,
         name="stop_execution",
+    ),
+
+    # =================================================
+    # CI/CD PIPELINE
+    # =================================================
+
+    path(
+        "pipeline/run/",
+        pipeline_run,
+        name="pipeline_run",
+    ),
+
+    path(
+        "pipeline/status/<str:job_id>/",
+        pipeline_status,
+        name="pipeline_status",
     ),
 ]
