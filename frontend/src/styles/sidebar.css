@@ -1,50 +1,86 @@
+
 .sidebar {
   width: 250px;
   min-height: 100vh;
-
+  flex-shrink: 0;
+  box-sizing: border-box;
   background: linear-gradient(180deg, #111827, #0b1120);
-
-  padding: 25px;
-
+  padding: 25px 16px;
   color: white;
-
-  border-right: 1px solid rgba(255,255,255,.08);
+  border-right: 1px solid rgba(255, 255, 255, 0.08);
 }
 
-.logo{
-    text-align:center;
-    color:#7C3AED;
-    margin-bottom:40px;
+.sidebar .logo {
+  text-align: center;
+  color: #7c3aed;
+  margin: 8px 0 40px;
 }
 
-.sidebar ul{
-    list-style:none;
-    padding:0;
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
 }
 
-.sidebar li{
-
-    display:flex;
-
-    align-items:center;
-
-    gap:12px;
-
-    padding:14px;
-
-    margin-bottom:10px;
-
-    border-radius:12px;
-
-    cursor:pointer;
-
-    transition:.3s;
+.sidebar li {
+  list-style: none;
+  margin-bottom: 10px;
 }
 
-.sidebar li:hover{
+.sidebar .sidebar-link,
+.sidebar .sidebar-link:link,
+.sidebar .sidebar-link:visited {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 14px;
+  border: none;
+  border-radius: 12px;
+  background: transparent;
+  color: #e2e8f0;
+  text-decoration: none;
+  font-family: inherit;
+  font-size: 16px;
+  font-weight: 500;
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease,
+    transform 0.2s ease;
+}
 
-    background:#7C3AED;
+.sidebar .sidebar-link:hover {
+  background: rgba(124, 58, 237, 0.2);
+  color: white;
+  transform: translateX(4px);
+  text-decoration: none;
+}
 
-    transform:translateX(8px);
+.sidebar .sidebar-link.active {
+  background: linear-gradient(
+    90deg,
+    rgba(124, 58, 237, 0.35),
+    rgba(37, 99, 235, 0.16)
+  );
+  color: white;
+  text-decoration: none;
+}
 
+.sidebar .sidebar-link svg {
+  flex-shrink: 0;
+}
+
+.sidebar .sidebar-bottom {
+  margin-top: 20px;
+}
+
+.sidebar .sidebar-logout {
+  color: #f87171;
+  appearance: none;
+}
+
+.sidebar .sidebar-logout:hover {
+  background: rgba(239, 68, 68, 0.15);
+  color: #ffffff;
 }

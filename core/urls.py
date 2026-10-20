@@ -1,3 +1,4 @@
+
 from django.urls import path
 
 from rest_framework_simplejwt.views import (
@@ -10,6 +11,8 @@ from .views import (
     ProjectDetailView,
     RegisterView,
     github_info,
+    github_files,
+    github_file_content,
 )
 
 from .devops_api import (
@@ -30,106 +33,89 @@ from .pipeline_views import (
 
 
 urlpatterns = [
-    # =================================================
     # PROJECTS
-    # =================================================
-
     path(
         "projects/",
         ProjectListCreateView.as_view(),
         name="projects",
     ),
-
     path(
         "projects/<int:pk>/",
         ProjectDetailView.as_view(),
         name="project-detail",
     ),
 
-    # =================================================
     # AUTHENTICATION
-    # =================================================
-
     path(
         "register/",
         RegisterView.as_view(),
         name="register",
     ),
-
     path(
         "login/",
         TokenObtainPairView.as_view(),
         name="login",
     ),
-
     path(
         "token/refresh/",
         TokenRefreshView.as_view(),
         name="token_refresh",
     ),
 
-    # =================================================
     # GITHUB
-    # =================================================
-
     path(
         "github-info/",
         github_info,
         name="github_info",
     ),
+    path(
+        "github-files/",
+        github_files,
+        name="github_files",
+    ),
+    path(
+        "github-file-content/",
+        github_file_content,
+        name="github_file_content",
+    ),
 
-    # =================================================
     # EXISTING CODE RUNNER
-    # =================================================
-
     path(
         "run-code/",
         run_code,
         name="run_code",
     ),
-
     path(
         "stop-code/",
         stop_code,
         name="stop_code",
     ),
 
-    # =================================================
-    # OLLAMA AI ASSISTANT
-    # =================================================
-
+    # AI ASSISTANT
     path(
         "ai-assistant/",
         ai_assistant,
         name="ai_assistant",
     ),
 
-    # =================================================
-    # MULTI-LANGUAGE DOCKER EXECUTION
-    # =================================================
-
+    # MULTI-LANGUAGE EXECUTION
     path(
         "execute/",
         execute_code,
         name="execute_code",
     ),
-
     path(
         "stop-execution/",
         stop_execution,
         name="stop_execution",
     ),
 
-    # =================================================
-    # CI/CD PIPELINE
-    # =================================================
-
+    # CI/CD
     path(
         "pipeline/run/",
         pipeline_run,
         name="pipeline_run",
     ),
-
     path(
         "pipeline/status/<str:job_id>/",
         pipeline_status,
