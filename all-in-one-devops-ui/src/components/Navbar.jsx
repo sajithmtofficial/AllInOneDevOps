@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import {
+  ArrowLeft,
   Bell,
   ChevronDown,
   Menu,
@@ -10,15 +11,27 @@ import {
   Sun,
   User,
 } from "lucide-react";
-import { currentUser, notifications } from "../data/mockData";
+import { useAuth } from "../context/AuthContext";
 
 function Navbar({ onMenuClick, softTheme, onToggleTheme, onLogout, onNotify }) {
+  const { username } = useAuth();
+  const displayName = username || "User";
+  const initials = displayName.slice(0, 1).toUpperCase();
   const navigate = useNavigate();
+  const location = useLocation();
   const searchRef = useRef(null);
   const panelRef = useRef(null);
   const [query, setQuery] = useState("");
   const [openPanel, setOpenPanel] = useState(null);
   const [mobileSearchOpen, setMobileSearchOpen] = useState(false);
+
+  useEffect(() => {
+    if (location.pathname !== "/projects") {
+      return;
+    }
+
+    setQuery(new URLSearchParams(location.search).get("q") || "");
+  }, [location.pathname, location.search]);
 
   useEffect(() => {
     const handler = (event) => {
@@ -50,15 +63,26 @@ function Navbar({ onMenuClick, softTheme, onToggleTheme, onLogout, onNotify }) {
 
   const submitSearch = (event) => {
     event.preventDefault();
-    if (query.trim()) {
-      onNotify?.(`Searching the workspace for “${query.trim()}” (demo).`);
-      setMobileSearchOpen(false);
-      navigate("/projects");
+    const term = query.trim();
+
+    if (!term) {
+      return;
     }
+
+    navigate(`/projects?q=${encodeURIComponent(term)}`);
+    setMobileSearchOpen(false);
   };
 
   const togglePanel = (panel) => {
     setOpenPanel((current) => (current === panel ? null : panel));
+  };
+
+  const goBack = () => {
+    if (window.history.length > 1) {
+      navigate(-1);
+    } else {
+      navigate("/");
+    }
   };
 
   return (
@@ -71,6 +95,16 @@ function Navbar({ onMenuClick, softTheme, onToggleTheme, onLogout, onNotify }) {
           aria-label="Open navigation"
         >
           <Menu size={19} />
+        </button>
+
+        <button
+          type="button"
+          onClick={goBack}
+          className="grid h-10 w-10 shrink-0 place-items-center rounded-xl border border-white/[0.07] bg-white/[0.03] text-slate-300 transition hover:bg-white/[0.07] hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-violet-400/70"
+          aria-label="Go back"
+          title="Go back"
+        >
+          <ArrowLeft size={18} />
         </button>
 
         <form
@@ -135,13 +169,10 @@ function Navbar({ onMenuClick, softTheme, onToggleTheme, onLogout, onNotify }) {
               type="button"
               onClick={() => togglePanel("notifications")}
               className="relative grid h-10 w-10 place-items-center rounded-xl border border-white/[0.07] bg-white/[0.03] text-slate-300 transition hover:bg-white/[0.07] hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-violet-400/70"
-              aria-label="Notifications, 3 unread"
+              aria-label="Notifications"
               aria-expanded={openPanel === "notifications"}
             >
               <Bell size={18} />
-              <span className="absolute -right-1.5 -top-1.5 grid h-5 min-w-5 place-items-center rounded-full border-2 border-[#0a0e1f] bg-red-500 px-1 text-[10px] font-bold leading-none text-white">
-                3
-              </span>
             </button>
 
             {openPanel === "notifications" && (
@@ -150,42 +181,29 @@ function Navbar({ onMenuClick, softTheme, onToggleTheme, onLogout, onNotify }) {
                   <p className="text-sm font-semibold text-white">
                     Notifications
                   </p>
-                  <span className="rounded-full bg-red-500/10 px-2 py-0.5 text-[10px] font-semibold text-red-400">
-                    3 unread
-                  </span>
                 </div>
 
-                <div className="divide-y divide-white/[0.05]">
-                  {notifications.map((notification) => (
-                    <div
-                      key={notification.id}
-                      className="flex gap-3 px-4 py-3 transition hover:bg-white/[0.03]"
-                    >
-                      <span className="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-violet-400" />
-                      <div className="min-w-0">
-                        <p className="text-xs font-semibold text-slate-100">
-                          {notification.title}
-                        </p>
-                        <p className="mt-0.5 text-[11px] leading-relaxed text-slate-400">
-                          {notification.description}
-                        </p>
-                        <p className="mt-1 text-[10px] text-slate-500">
-                          {notification.time}
-                        </p>
-                      </div>
-                    </div>
-                  ))}
+                <div className="px-4 py-8 text-center">
+                  <span className="mx-auto grid h-11 w-11 place-items-center rounded-xl bg-white/[0.04] text-slate-500 ring-1 ring-white/[0.06]">
+                    <Bell size={17} />
+                  </span>
+                  <p className="mt-3 text-xs font-medium text-slate-300">
+                    No notifications yet
+                  </p>
+                  <p className="mt-1 text-[11px] leading-relaxed text-slate-500">
+                    Pipeline and deployment events will appear here.
+                  </p>
                 </div>
 
                 <button
                   type="button"
                   onClick={() => {
                     setOpenPanel(null);
-                    navigate("/monitoring");
+                    navigate("/logs");
                   }}
                   className="w-full border-t border-white/[0.06] py-2.5 text-xs font-medium text-violet-300 transition hover:bg-white/[0.03] hover:text-violet-200"
                 >
-                  View all activity
+                  Open pipeline logs
                 </button>
               </div>
             )}
@@ -200,10 +218,10 @@ function Navbar({ onMenuClick, softTheme, onToggleTheme, onLogout, onNotify }) {
               aria-expanded={openPanel === "profile"}
             >
               <span className="grid h-9 w-9 place-items-center rounded-full bg-gradient-to-br from-violet-500 to-indigo-600 text-sm font-bold text-white shadow-[0_0_20px_-4px_rgba(124,58,237,0.9)]">
-                {currentUser.initials}
+                {initials}
               </span>
               <span className="hidden text-sm font-medium text-slate-200 sm:block">
-                {currentUser.name}
+                {displayName}
               </span>
               <ChevronDown
                 size={15}
@@ -217,10 +235,10 @@ function Navbar({ onMenuClick, softTheme, onToggleTheme, onLogout, onNotify }) {
               <div className="fixed inset-x-4 top-[88px] z-50 overflow-hidden rounded-2xl border border-white/[0.08] bg-[#11162b] shadow-2xl shadow-black/50 sm:absolute sm:inset-x-auto sm:right-0 sm:top-14 sm:w-56">
                 <div className="border-b border-white/[0.06] px-4 py-3">
                   <p className="text-sm font-semibold text-white">
-                    {currentUser.name}
+                    {displayName}
                   </p>
                   <p className="mt-0.5 text-[11px] text-slate-400">
-                    {currentUser.role}
+                    Signed in to All In One DevOps
                   </p>
                 </div>
 

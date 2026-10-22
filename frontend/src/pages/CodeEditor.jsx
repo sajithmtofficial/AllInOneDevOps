@@ -199,6 +199,144 @@ function getFileIcon(filename) {
   return "📄";
 }
 
+function AIAnimation({ thinking = false, size = 34 }) {
+  return (
+    <svg
+      className={
+        thinking
+          ? "ai-anim ai-anim-thinking"
+          : "ai-anim"
+      }
+      width={size}
+      height={size}
+      viewBox="0 0 64 64"
+      role="img"
+      aria-label="AI assistant"
+    >
+      <defs>
+        <linearGradient
+          id="aiAnimGradient"
+          x1="0"
+          y1="0"
+          x2="1"
+          y2="1"
+        >
+          <stop offset="0%" stopColor="#8d4cff" />
+
+          <stop offset="100%" stopColor="#35c8ff" />
+        </linearGradient>
+
+        <radialGradient
+          id="aiAnimGlow"
+          cx="50%"
+          cy="50%"
+          r="50%"
+        >
+          <stop
+            offset="0%"
+            stopColor="#8d4cff"
+            stopOpacity="0.6"
+          />
+
+          <stop
+            offset="100%"
+            stopColor="#8d4cff"
+            stopOpacity="0"
+          />
+        </radialGradient>
+      </defs>
+
+      <circle
+        className="ai-anim-glow"
+        cx="32"
+        cy="32"
+        r="30"
+        fill="url(#aiAnimGlow)"
+      />
+
+      <circle
+        className="ai-anim-ring"
+        cx="32"
+        cy="32"
+        r="27"
+        fill="none"
+        stroke="url(#aiAnimGradient)"
+        strokeWidth="2"
+        strokeDasharray="7 11"
+        strokeLinecap="round"
+      />
+
+      <circle
+        className="ai-anim-ring-2"
+        cx="32"
+        cy="32"
+        r="22"
+        fill="none"
+        stroke="#35c8ff"
+        strokeWidth="1"
+        strokeOpacity="0.45"
+        strokeDasharray="2 9"
+      />
+
+      <g className="ai-anim-orbit">
+        <circle cx="32" cy="5" r="2.6" fill="#35c8ff" />
+      </g>
+
+      <g className="ai-anim-body">
+        <path
+          d="M32 23 v-7"
+          stroke="url(#aiAnimGradient)"
+          strokeWidth="2"
+          strokeLinecap="round"
+        />
+
+        <circle
+          className="ai-anim-antenna"
+          cx="32"
+          cy="14"
+          r="3.2"
+          fill="#8d4cff"
+        />
+
+        <rect
+          x="18"
+          y="23"
+          width="28"
+          height="24"
+          rx="9"
+          fill="#151b28"
+          stroke="url(#aiAnimGradient)"
+          strokeWidth="2"
+        />
+
+        <circle
+          className="ai-anim-eye"
+          cx="26"
+          cy="33"
+          r="3.4"
+          fill="#35c8ff"
+        />
+
+        <circle
+          className="ai-anim-eye ai-anim-eye-2"
+          cx="38"
+          cy="33"
+          r="3.4"
+          fill="#8d4cff"
+        />
+
+        <path
+          d="M27 40 q5 4 10 0"
+          fill="none"
+          stroke="#7f8ba2"
+          strokeWidth="1.6"
+          strokeLinecap="round"
+        />
+      </g>
+    </svg>
+  );
+}
+
 function getStarterCode(language) {
   switch (language) {
     case "python":
@@ -414,6 +552,9 @@ function CodeEditor() {
 
   const [correctedCode, setCorrectedCode] =
     useState("");
+
+  const [codeViewTab, setCodeViewTab] =
+    useState("current");
 
   const [copied, setCopied] =
     useState(false);
@@ -1097,6 +1238,8 @@ ${js}
         setCorrectedCode(
           data.corrected_code
         );
+
+        setCodeViewTab("corrected");
       }
 
       setChatMessages(
@@ -1254,6 +1397,8 @@ ${terminalOutput}`,
     saveCurrentFileContent(
       correctedCode
     );
+
+    setCodeViewTab("current");
 
     setTerminalOutput(
       "> Corrected code pasted into editor.\n"
@@ -1574,8 +1719,13 @@ ${terminalOutput}`,
               AI ROBOT
           ================================================= */}
 
-          <div className="robot-ai-section">
-
+          <div
+            className={
+              isAIThinking
+                ? "robot-ai-section is-thinking"
+                : "robot-ai-section"
+            }
+          >
             <div className="robot-image-container">
 
               <img
@@ -1584,6 +1734,33 @@ ${terminalOutput}`,
                 className="robot-image"
               />
 
+            </div>
+
+            <div
+              className="robot-message"
+              role="status"
+              aria-live="polite"
+            >
+              {isAIThinking ? (
+                <>
+                  <span className="robot-message-text">
+                    Let me think
+                  </span>
+
+                  <span
+                    className="robot-dots"
+                    aria-hidden="true"
+                  >
+                    <i></i>
+                    <i></i>
+                    <i></i>
+                  </span>
+                </>
+              ) : (
+                <span className="robot-message-text">
+                  May I help you?
+                </span>
+              )}
             </div>
 
             <div className="robot-title">
@@ -1788,6 +1965,24 @@ ${terminalOutput}`,
               }}
             />
 
+            {/* AI IMAGE ANIMATION OVERLAY */}
+
+            {isAIThinking && (
+              <div className="ai-editor-overlay">
+
+                <AIAnimation size={130} thinking />
+
+                <div className="ai-editor-overlay-title">
+                  AI is analyzing your code
+                </div>
+
+                <div className="ai-editor-overlay-bar">
+                  <span></span>
+                </div>
+
+              </div>
+            )}
+
           </div>
 
           {/* =================================================
@@ -1852,7 +2047,10 @@ ${terminalOutput}`,
             <div className="ai-panel-title">
 
               <span className="ai-icon">
-                🤖
+                <AIAnimation
+                  size={30}
+                  thinking={isAIThinking}
+                />
               </span>
 
               <div>
@@ -1931,7 +2129,7 @@ ${terminalOutput}`,
               <div className="ai-message">
 
                 <div className="message-avatar">
-                  🤖
+                  <AIAnimation size={26} thinking />
                 </div>
 
                 <div className="message-content">
@@ -1940,46 +2138,85 @@ ${terminalOutput}`,
                     AI Assistant
                   </strong>
 
-                  <p>
-                    Thinking...
-                  </p>
+                  <div className="ai-thinking-bubble">
+                    <AIAnimation size={64} thinking />
+
+                    <p>Thinking...</p>
+                  </div>
 
                 </div>
 
               </div>
             )}
 
-            {/* CORRECTED CODE */}
+            {/* CODE OPTIONS: CURRENT / CORRECTED */}
 
-            {correctedCode && (
-              <div className="ai-code-card">
+            <div className="ai-code-card">
 
-                <div className="ai-code-header">
+              <div className="ai-code-tabs">
 
-                  <span>
-                    Corrected Code
-                  </span>
+                <button
+                  type="button"
+                  className={
+                    codeViewTab === "current"
+                      ? "ai-code-tab ai-code-tab-active"
+                      : "ai-code-tab"
+                  }
+                  onClick={() =>
+                    setCodeViewTab("current")
+                  }
+                >
+                  Current Code
+                </button>
 
-                  <div
-                    style={{
-                      display: "flex",
-                      gap: "6px",
-                    }}
+                <button
+                  type="button"
+                  className={
+                    codeViewTab === "corrected"
+                      ? "ai-code-tab ai-code-tab-active"
+                      : "ai-code-tab"
+                  }
+                  disabled={!correctedCode}
+                  onClick={() =>
+                    setCodeViewTab("corrected")
+                  }
+                >
+                  Corrected Code
+                </button>
+
+              </div>
+
+              <div className="ai-code-header">
+
+                <span>
+                  {codeViewTab === "corrected"
+                    ? "AI Corrected Code"
+                    : "Current Code"}
+                </span>
+
+                <div
+                  style={{
+                    display: "flex",
+                    gap: "6px",
+                  }}
+                >
+
+                  <button
+                    type="button"
+                    onClick={() =>
+                      copyToClipboard(
+                        codeViewTab === "corrected"
+                          ? correctedCode
+                          : code
+                      )
+                    }
                   >
+                    {copied
+                      ? "Copied!"
+                      : "Copy"}
+                  </button>
 
-                    <button
-                      type="button"
-                      onClick={() =>
-                        copyToClipboard(
-                          correctedCode
-                        )
-                      }
-                    >
-                      {copied
-                        ? "Copied!"
-                        : "Copy Code"}
-                    </button>
-
+                  {codeViewTab === "corrected" && (
                     <button
                       type="button"
                       onClick={
@@ -1988,45 +2225,16 @@ ${terminalOutput}`,
                     >
                       📋 Paste to Editor
                     </button>
-
-                  </div>
+                  )}
 
                 </div>
-
-                <pre>
-                  {correctedCode}
-                </pre>
-
-              </div>
-            )}
-
-            {/* CURRENT CODE */}
-
-            <div className="ai-code-card">
-
-              <div className="ai-code-header">
-
-                <span>
-                  Current Code
-                </span>
-
-                <button
-                  type="button"
-                  onClick={() =>
-                    copyToClipboard(
-                      code
-                    )
-                  }
-                >
-                  {copied
-                    ? "Copied!"
-                    : "Copy"}
-                </button>
 
               </div>
 
               <pre>
-                {code}
+                {codeViewTab === "corrected"
+                  ? correctedCode
+                  : code}
               </pre>
 
             </div>

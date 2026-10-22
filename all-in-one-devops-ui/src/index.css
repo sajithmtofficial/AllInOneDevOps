@@ -181,6 +181,753 @@ a {
   color: transparent;
 }
 
+/* =========================================================
+   ROAMING AI ROBOT + ANIMATED BACKGROUND
+========================================================= */
+
+.ai-bg-gradient {
+  position: absolute;
+  inset: -10px;
+  z-index: -1;
+
+  overflow: hidden;
+
+  pointer-events: none;
+}
+
+.ai-bg-gradient::before {
+  content: "";
+
+  position: absolute;
+  inset: -25%;
+
+  background: radial-gradient(
+      circle at 20% 20%,
+      rgba(124, 58, 237, 0.18),
+      transparent 45%
+    ),
+    radial-gradient(
+      circle at 80% 25%,
+      rgba(56, 189, 248, 0.16),
+      transparent 45%
+    ),
+    radial-gradient(
+      circle at 50% 82%,
+      rgba(16, 185, 129, 0.1),
+      transparent 45%
+    );
+
+  background-size: 150% 150%;
+
+  filter: blur(38px);
+
+  animation: aiBgDrift 26s ease-in-out infinite alternate,
+    aiBgHue 34s linear infinite;
+}
+
+.ai-roam-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 30;
+
+  overflow: hidden;
+
+  pointer-events: none;
+}
+
+.ai-roam-robot {
+  position: absolute;
+  top: 0;
+  left: 0;
+
+  width: 72px;
+  height: 72px;
+
+  animation: aiRoam 30s linear infinite;
+
+  will-change: transform;
+}
+
+.ai-roam-robot img {
+  position: relative;
+  z-index: 1;
+
+  width: 100%;
+  height: 100%;
+
+  object-fit: contain;
+
+  filter: drop-shadow(0 8px 16px rgba(2, 6, 23, 0.45))
+    drop-shadow(0 0 10px rgba(56, 189, 248, 0.35));
+
+  animation: aiRoamBob 1.05s ease-in-out infinite;
+}
+
+.ai-roam-glow {
+  position: absolute;
+  inset: -22%;
+  z-index: 0;
+
+  border-radius: 50%;
+
+  background: radial-gradient(
+    circle,
+    rgba(53, 200, 255, 0.55) 0%,
+    rgba(124, 58, 237, 0.3) 45%,
+    transparent 70%
+  );
+
+  animation: aiRoamGlow 6s ease-in-out infinite;
+}
+
+@keyframes aiRoam {
+  0% {
+    transform: translate(4vw, 14vh) scale(0.9);
+  }
+
+  10% {
+    transform: translate(38vw, 6vh) scale(1);
+  }
+
+  20% {
+    transform: translate(82vw, 14vh) scale(0.92);
+  }
+
+  30% {
+    transform: translate(76vw, 48vh) scale(1);
+  }
+
+  42% {
+    transform: translate(90vw, 78vh) scale(0.94);
+  }
+
+  54% {
+    transform: translate(48vw, 72vh) scale(1.04);
+  }
+
+  66% {
+    transform: translate(8vw, 84vh) scale(0.9);
+  }
+
+  76% {
+    transform: translate(16vw, 46vh) scale(0.98);
+  }
+
+  88% {
+    transform: translate(3vw, 26vh) scale(0.92);
+  }
+
+  100% {
+    transform: translate(4vw, 14vh) scale(0.9);
+  }
+}
+
+@keyframes aiRoamBob {
+  0%,
+  100% {
+    transform: translateY(0) rotate(-3deg);
+  }
+
+  50% {
+    transform: translateY(-5px) rotate(3deg);
+  }
+}
+
+@keyframes aiRoamGlow {
+  0%,
+  100% {
+    opacity: 0.55;
+
+    transform: scale(0.9);
+
+    filter: blur(12px) hue-rotate(0deg);
+  }
+
+  50% {
+    opacity: 1;
+
+    transform: scale(1.2);
+
+    filter: blur(12px) hue-rotate(180deg);
+  }
+}
+
+@keyframes aiBgDrift {
+  0% {
+    background-position: 0% 0%, 100% 0%, 50% 100%;
+  }
+
+  50% {
+    background-position: 60% 40%, 20% 70%, 80% 30%;
+  }
+
+  100% {
+    background-position: 0% 100%, 100% 100%, 50% 0%;
+  }
+}
+
+@keyframes aiBgHue {
+  from {
+    filter: blur(38px) hue-rotate(0deg);
+  }
+
+  to {
+    filter: blur(38px) hue-rotate(360deg);
+  }
+}
+
+/* =========================================================
+   AI ROBOT MASCOT
+========================================================= */
+
+.ai-robot-avatar {
+  position: relative;
+
+  display: grid;
+  place-items: center;
+
+  width: 34px;
+  height: 34px;
+
+  overflow: hidden;
+
+  border-radius: 9px;
+
+  background: radial-gradient(
+    circle at 50% 30%,
+    rgba(53, 200, 255, 0.2),
+    rgba(124, 58, 237, 0.15)
+  );
+
+  box-shadow: inset 0 0 0 1px rgba(139, 92, 246, 0.24),
+    0 0 16px rgba(56, 189, 248, 0.18);
+}
+
+.ai-robot-avatar img {
+  width: 31px;
+  height: 31px;
+
+  object-fit: contain;
+
+  filter: drop-shadow(0 0 4px rgba(53, 200, 255, 0.6));
+
+  animation: aiRobotFloatSm 3.4s ease-in-out infinite;
+}
+
+.ai-robot-avatar.is-thinking {
+  animation: aiRobotAvatarPulse 1.1s ease-in-out infinite;
+}
+
+.ai-robot-avatar.is-thinking img {
+  animation-duration: 1.3s;
+}
+
+.ai-robot-hero {
+  position: relative;
+  isolation: isolate;
+
+  width: 220px;
+  height: 200px;
+
+  margin: 0 auto;
+
+  display: grid;
+  place-items: center;
+
+  overflow: hidden;
+}
+
+.ai-robot-hero::before {
+  content: "";
+
+  position: absolute;
+  z-index: 0;
+
+  width: 198px;
+  height: 198px;
+
+  border-radius: 50%;
+
+  background: conic-gradient(
+    from 0deg,
+    transparent 0deg 248deg,
+    rgba(53, 200, 255, 0.5) 300deg,
+    rgba(139, 92, 246, 0.55) 340deg,
+    transparent 360deg
+  );
+
+  -webkit-mask: radial-gradient(
+    farthest-side,
+    transparent calc(100% - 2px),
+    #000 calc(100% - 1px)
+  );
+  mask: radial-gradient(
+    farthest-side,
+    transparent calc(100% - 2px),
+    #000 calc(100% - 1px)
+  );
+
+  animation: aiRobotRingSpin 5s linear infinite;
+
+  opacity: 0.85;
+}
+
+.ai-robot-aura {
+  position: absolute;
+  z-index: -1;
+
+  width: 196px;
+  height: 196px;
+
+  border-radius: 50%;
+
+  background: radial-gradient(
+    circle,
+    rgba(53, 200, 255, 0.32) 0%,
+    rgba(124, 58, 237, 0.2) 45%,
+    transparent 70%
+  );
+
+  filter: blur(12px);
+
+  animation: aiRobotAura 4.5s ease-in-out infinite;
+}
+
+.ai-robot-image {
+  position: relative;
+  z-index: 1;
+
+  width: 190px;
+  height: 190px;
+
+  object-fit: contain;
+
+  filter: drop-shadow(0 10px 22px rgba(2, 6, 23, 0.4))
+    drop-shadow(0 0 18px rgba(53, 200, 255, 0.4));
+
+  animation: aiRobotFloat 3.4s ease-in-out infinite;
+
+  transition: transform 0.3s ease;
+}
+
+.ai-robot-hero:hover .ai-robot-image {
+  animation-play-state: paused;
+
+  transform: translateY(-5px) scale(1.05);
+}
+
+.ai-robot-scan {
+  position: absolute;
+  z-index: 2;
+
+  left: 10%;
+  right: 10%;
+  top: 0;
+
+  height: 55%;
+
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    rgba(53, 200, 255, 0.24) 50%,
+    transparent 100%
+  );
+
+  mix-blend-mode: screen;
+
+  pointer-events: none;
+
+  animation: aiRobotScan 5s ease-in-out infinite;
+}
+
+.ai-robot-hero.is-thinking::before {
+  animation-duration: 1.6s;
+}
+
+.ai-robot-hero.is-thinking .ai-robot-aura {
+  animation-duration: 1.3s;
+}
+
+.ai-robot-hero.is-thinking .ai-robot-image {
+  animation-duration: 1.7s;
+}
+
+.ai-robot-hero.is-thinking .ai-robot-scan {
+  animation-duration: 1.6s;
+}
+
+.ai-robot-orbit {
+  position: absolute;
+  inset: -4px;
+  z-index: 3;
+
+  pointer-events: none;
+
+  animation: aiRobotOrbit 9s linear infinite;
+}
+
+.ai-robot-orbit i {
+  position: absolute;
+
+  width: 5px;
+  height: 5px;
+
+  border-radius: 50%;
+
+  background: #35c8ff;
+
+  box-shadow: 0 0 10px rgba(53, 200, 255, 0.9);
+
+  animation: aiRobotSpark 2.4s ease-in-out infinite;
+}
+
+.ai-robot-orbit i:nth-child(1) {
+  top: 4%;
+  left: 22%;
+}
+
+.ai-robot-orbit i:nth-child(2) {
+  top: 18%;
+  right: 2%;
+
+  width: 4px;
+  height: 4px;
+
+  background: #a78bfa;
+
+  box-shadow: 0 0 10px rgba(167, 139, 250, 0.9);
+
+  animation-delay: 0.5s;
+}
+
+.ai-robot-orbit i:nth-child(3) {
+  bottom: 6%;
+  right: 20%;
+
+  width: 3px;
+  height: 3px;
+
+  animation-delay: 1s;
+}
+
+.ai-robot-orbit i:nth-child(4) {
+  bottom: 22%;
+  left: 1%;
+
+  width: 4px;
+  height: 4px;
+
+  background: #34d399;
+
+  box-shadow: 0 0 10px rgba(52, 211, 153, 0.9);
+
+  animation-delay: 1.5s;
+}
+
+.ai-robot-hero.is-thinking .ai-robot-orbit {
+  animation-duration: 2.2s;
+}
+
+.ai-robot-bubble {
+  position: relative;
+
+  margin-top: -2px;
+
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+
+  padding: 4px 10px;
+
+  border: 1px solid rgba(53, 200, 255, 0.28);
+  border-radius: 8px;
+
+  background: linear-gradient(
+    180deg,
+    rgba(53, 200, 255, 0.14),
+    rgba(124, 58, 237, 0.1)
+  );
+
+  color: #cfeeff;
+
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.2px;
+  line-height: 1.3;
+  white-space: nowrap;
+
+  box-shadow: 0 0 16px rgba(53, 200, 255, 0.1),
+    inset 0 0 10px rgba(53, 200, 255, 0.05);
+
+  animation: aiRobotBubbleIn 0.6s cubic-bezier(0.2, 0.9, 0.3, 1.3) both,
+    aiRobotBubbleGlow 3s ease-in-out 0.6s infinite;
+}
+
+.ai-robot-bubble::before {
+  content: "";
+
+  position: absolute;
+  top: -4px;
+  left: 50%;
+
+  width: 7px;
+  height: 7px;
+
+  border-top: 1px solid rgba(53, 200, 255, 0.28);
+  border-left: 1px solid rgba(53, 200, 255, 0.28);
+
+  background: #141b33;
+
+  transform: translateX(-50%) rotate(45deg);
+}
+
+.ai-robot-bubble.is-thinking {
+  color: #dcceff;
+
+  border-color: rgba(139, 92, 246, 0.4);
+}
+
+.ai-robot-caret {
+  width: 1px;
+  height: 10px;
+
+  background: #35c8ff;
+
+  animation: aiRobotCaret 0.9s step-end infinite;
+}
+
+.ai-robot-dots {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+
+  padding-left: 1px;
+}
+
+.ai-robot-dots i {
+  width: 3px;
+  height: 3px;
+
+  border-radius: 50%;
+
+  background: #a78bfa;
+
+  box-shadow: 0 0 6px rgba(139, 92, 246, 0.8);
+
+  animation: aiRobotDot 1s ease-in-out infinite;
+}
+
+.ai-robot-dots i:nth-child(2) {
+  animation-delay: 0.15s;
+}
+
+.ai-robot-dots i:nth-child(3) {
+  animation-delay: 0.3s;
+}
+
+@keyframes aiRobotFloat {
+  0%,
+  100% {
+    transform: translateY(8px) rotate(-4deg) scale(0.97);
+  }
+
+  50% {
+    transform: translateY(-10px) rotate(4deg) scale(1.04);
+  }
+}
+
+@keyframes aiRobotRingSpin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes aiRobotFloatSm {
+  0%,
+  100% {
+    transform: translateY(1px) rotate(-2deg);
+  }
+
+  50% {
+    transform: translateY(-1px) rotate(2deg);
+  }
+}
+
+@keyframes aiRobotAura {
+  0%,
+  100% {
+    opacity: 0.45;
+
+    transform: scale(0.85);
+  }
+
+  50% {
+    opacity: 1;
+
+    transform: scale(1.1);
+  }
+}
+
+@keyframes aiRobotScan {
+  0% {
+    transform: translateY(-110%);
+  }
+
+  55%,
+  100% {
+    transform: translateY(330%);
+  }
+}
+
+@keyframes aiRobotAvatarPulse {
+  0%,
+  100% {
+    box-shadow: inset 0 0 0 1px rgba(139, 92, 246, 0.24),
+      0 0 12px rgba(56, 189, 248, 0.2);
+  }
+
+  50% {
+    box-shadow: inset 0 0 0 1px rgba(139, 92, 246, 0.45),
+      0 0 22px rgba(56, 189, 248, 0.45);
+  }
+}
+
+@keyframes aiRobotBubbleIn {
+  from {
+    opacity: 0;
+
+    transform: translateY(6px) scale(0.94);
+  }
+
+  to {
+    opacity: 1;
+
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes aiRobotBubbleGlow {
+  0%,
+  100% {
+    box-shadow: 0 0 16px rgba(53, 200, 255, 0.1),
+      inset 0 0 10px rgba(53, 200, 255, 0.05);
+  }
+
+  50% {
+    box-shadow: 0 0 24px rgba(53, 200, 255, 0.22),
+      inset 0 0 12px rgba(53, 200, 255, 0.09);
+  }
+}
+
+@keyframes aiRobotOrbit {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes aiRobotSpark {
+  0%,
+  100% {
+    opacity: 0.25;
+
+    transform: scale(0.7);
+  }
+
+  50% {
+    opacity: 1;
+
+    transform: scale(1.35);
+  }
+}
+
+@keyframes aiRobotCaret {
+  0%,
+  49% {
+    opacity: 0;
+  }
+
+  50%,
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes aiRobotDot {
+  0%,
+  100% {
+    opacity: 0.35;
+
+    transform: translateY(0);
+  }
+
+  50% {
+    opacity: 1;
+
+    transform: translateY(-2px);
+  }
+}
+
+/* =========================================================
+   FULL SCREEN CODE EDITOR
+========================================================= */
+
+.code-editor-shell.is-expanded {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+
+  display: flex;
+  flex-direction: column;
+
+  width: 100vw;
+  height: 100vh;
+
+  border: 0;
+  border-radius: 0;
+
+  background: #0d1224;
+}
+
+.code-editor-shell.is-expanded .code-editor-body {
+  flex: 1;
+
+  min-height: 0;
+}
+
+.code-editor-shell.is-expanded .code-editor-main {
+  min-height: 0;
+}
+
+.code-editor-shell.is-expanded .code-editor-textarea {
+  flex: 1 1 0;
+
+  height: auto;
+
+  min-height: 160px;
+}
+
+.code-editor-shell.is-expanded .code-editor-preview {
+  height: min(42vh, 520px);
+}
+
+.code-editor-shell.is-expanded .code-editor-terminal {
+  height: min(34vh, 430px);
+}
+
+@media (min-width: 768px) {
+  .code-editor-shell.is-expanded .code-editor-explorer {
+    width: 230px;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,

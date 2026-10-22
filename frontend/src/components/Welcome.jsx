@@ -2,6 +2,7 @@ import "../styles/dashboard.css";
 import { FaBell, FaCog, FaUserCircle } from "react-icons/fa";
 
 function Welcome() {
+  const username = localStorage.getItem("username") || "User";
   const today = new Date().toLocaleDateString("en-US", {
     weekday: "long",
     year: "numeric",
@@ -13,7 +14,7 @@ function Welcome() {
     <div className="welcome-container">
 
       <div className="welcome-left">
-        <h1>👋 Welcome Back, Sajith!</h1>
+        <h1>👋 Welcome Back, {username}!</h1>
 
         <p>
           Manage your DevOps platform from one powerful dashboard.

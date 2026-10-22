@@ -17,6 +17,7 @@ import {
   Folder,
   FolderPlus,
   GitBranch,
+  History,
   Home,
   Infinity as InfinityIcon,
   Laptop,
@@ -57,6 +58,7 @@ export const iconLibrary = {
   folder: Folder,
   folderPlus: FolderPlus,
   gitBranch: GitBranch,
+  history: History,
   home: Home,
   infinity: InfinityIcon,
   laptop: Laptop,
@@ -178,7 +180,7 @@ export function GitHubIcon({ size = 16, ...props }) {
   );
 }
 
-export function InfinityLogo({ className = "", ...props }) {
+export function InfinityLogo({ className = "", monochrome = false, ...props }) {
   return (
     <svg
       viewBox="0 0 24 24"
@@ -203,7 +205,7 @@ export function InfinityLogo({ className = "", ...props }) {
       </defs>
       <path
         d="M6 16c5 0 7-8 12-8a4 4 0 0 1 0 8c-5 0-7-8-12-8a4 4 0 1 0 0 8"
-        stroke="url(#infinity-gradient)"
+        stroke={monochrome ? "currentColor" : "url(#infinity-gradient)"}
         strokeWidth="2.1"
         strokeLinecap="round"
         strokeLinejoin="round"

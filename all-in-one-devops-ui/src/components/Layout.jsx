@@ -1,13 +1,22 @@
 import { useEffect, useState } from "react";
-import { Outlet } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 import { Sparkles, X } from "lucide-react";
 import Sidebar from "./Sidebar";
 import Navbar from "./Navbar";
+import { useAuth } from "../context/AuthContext";
 
 export default function Layout() {
+  const navigate = useNavigate();
+  const { logout } = useAuth();
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [softTheme, setSoftTheme] = useState(false);
+  const [softTheme, setSoftTheme] = useState(
+    () => localStorage.getItem("softTheme") === "1"
+  );
   const [toast, setToast] = useState(null);
+
+  useEffect(() => {
+    localStorage.setItem("softTheme", softTheme ? "1" : "0");
+  }, [softTheme]);
 
   useEffect(() => {
     if (!toast) {
@@ -24,7 +33,8 @@ export default function Layout() {
 
   const handleLogout = () => {
     setSidebarOpen(false);
-    notify("Signed out of the demo workspace.");
+    logout();
+    navigate("/login", { replace: true });
   };
 
   return (

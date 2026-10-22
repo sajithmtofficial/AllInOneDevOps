@@ -1,7 +1,8 @@
 import { NavLink } from "react-router-dom";
-import { Rocket, X } from "lucide-react";
-import { sidebarSections } from "../data/mockData";
+import { X } from "lucide-react";
+import { sidebarSections } from "../data/navigation";
 import { Icon } from "./icons";
+import BrandMark from "./BrandMark";
 
 function navLinkClass({ isActive }) {
   return [
@@ -33,9 +34,7 @@ export default function Sidebar({ open, onClose, onLogout }) {
         <div className="absolute inset-x-0 top-0 h-40 bg-[radial-gradient(circle_at_20%_0%,rgba(124,58,237,0.16),transparent_65%)] pointer-events-none" />
 
         <div className="relative flex h-20 shrink-0 items-center gap-3 border-b border-white/[0.06] px-6">
-          <div className="grid h-11 w-11 place-items-center rounded-2xl bg-gradient-to-br from-[#7c3aed] to-[#4f46e5] shadow-[0_12px_30px_-12px_rgba(124,58,237,0.9)]">
-            <Rocket size={20} className="text-white" />
-          </div>
+          <BrandMark className="h-11 w-11" iconClassName="h-7 w-7" />
 
           <p className="min-w-0 truncate text-[16px] font-semibold tracking-tight text-white sm:text-[18px]">
             All In One <span className="text-violet-400">DevOps</span>

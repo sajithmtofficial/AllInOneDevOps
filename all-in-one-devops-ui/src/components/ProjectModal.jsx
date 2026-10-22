@@ -129,8 +129,8 @@ export default function ProjectModal({
             </h2>
             <p className="mt-1 text-xs leading-relaxed text-slate-400">
               {project
-                ? "Changes are saved directly to the Django API."
-                : "Add a project to your Django workspace."}
+                ? "Update your project details and save the changes."
+                : "Add a new project to your workspace."}
             </p>
           </div>
 

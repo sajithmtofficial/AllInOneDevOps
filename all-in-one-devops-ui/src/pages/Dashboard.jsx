@@ -5,8 +5,11 @@ import StatCard from "../components/StatCard";
 import RecentProjects from "../components/RecentProjects";
 import RecentActivity from "../components/RecentActivity";
 import QuickActionCard from "../components/QuickActionCard";
-import { quickActions } from "../data/mockData";
+import { quickActions } from "../data/navigation";
 import { getProjects } from "../services/projects";
+import { getDockerContainers, getDockerStatus } from "../services/docker";
+import { getPipelineRuns } from "../services/pipelines";
+import { getRecentActivity } from "../services/history";
 import { timeAgo } from "../utils/format";
 
 function sortByNewest(projects) {
@@ -21,6 +24,14 @@ export default function Dashboard() {
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [containerState, setContainerState] = useState({
+    loading: true,
+    available: false,
+    containers: [],
+  });
+  const [runs, setRuns] = useState([]);
+  const [runsLoading, setRunsLoading] = useState(true);
+  const [activities, setActivities] = useState([]);
 
   const loadProjects = useCallback(async (signal) => {
     setLoading(true);
@@ -36,7 +47,7 @@ export default function Dashboard() {
 
       setError(
         requestError.message ||
-          "Could not reach the Django API. Make sure the backend is running."
+          "Could not load your projects. Check your connection and try again."
       );
     } finally {
       if (!signal?.aborted) {
@@ -52,48 +63,112 @@ export default function Dashboard() {
     return () => controller.abort();
   }, [loadProjects]);
 
-  const stats = useMemo(
-    () => [
+  useEffect(() => {
+    let cancelled = false;
+
+    Promise.all([
+      getDockerStatus().catch((requestError) => requestError.data || {
+        available: false,
+        error: requestError.message,
+      }),
+      getDockerContainers().catch(() => ({ containers: [] })),
+      getPipelineRuns({ limit: 100 }).catch(() => ({ runs: [] })),
+      getRecentActivity(6).catch(() => ({ activities: [] })),
+    ]).then(([dockerStatus, dockerContainers, pipelineRuns, recentActivity]) => {
+      if (cancelled) return;
+
+      setContainerState({
+        loading: false,
+        available: Boolean(dockerStatus.available),
+        containers: dockerContainers.containers || [],
+      });
+      setRuns(pipelineRuns.runs || []);
+      setRunsLoading(false);
+      setActivities(
+        (recentActivity.activities || []).map((item) => ({
+          ...item,
+          time: timeAgo(item.created_at),
+        }))
+      );
+    });
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  const stats = useMemo(() => {
+    const today = new Date().toDateString();
+    const buildsToday = runs.filter(
+      (run) => run.started_at && new Date(run.started_at).toDateString() === today
+    ).length;
+    const deployments = runs.filter(
+      (run) => run.deployment?.container || run.container
+    ).length;
+    const runningContainers = containerState.containers.filter(
+      (container) => container.State === "running"
+    ).length;
+
+    return [
       {
         id: "projects",
         label: "Total Projects",
         value: loading ? "—" : String(projects.length),
         change: loading ? null : "Live",
         live: true,
-        note: "from Django API",
+        note: "All projects",
         tone: "purple",
         icon: "folder",
       },
       {
         id: "containers",
         label: "Running Containers",
-        value: "0",
-        change: null,
-        note: "No API endpoint yet",
+        value: containerState.loading
+          ? "—"
+          : containerState.available
+            ? String(runningContainers)
+            : "—",
+        change:
+          !containerState.loading && containerState.available ? "Live" : null,
+        live: true,
+        note: containerState.loading
+          ? "Loading Docker"
+          : containerState.available
+            ? `${containerState.containers.length} total containers`
+            : "Docker offline",
         tone: "blue",
         icon: "container",
       },
       {
         id: "builds",
         label: "Builds Today",
-        value: "0",
-        change: null,
-        note: "No API endpoint yet",
+        value: runsLoading ? "—" : String(buildsToday),
+        change: runsLoading ? null : "Live",
+        live: true,
+        note: runsLoading ? "Loading CI/CD" : `${runs.length} recent runs`,
         tone: "green",
         icon: "wrench",
       },
       {
         id: "deployments",
         label: "Deployments",
-        value: "0",
-        change: null,
-        note: "No API endpoint yet",
+        value: runsLoading ? "—" : String(deployments),
+        change: runsLoading ? null : "Recorded",
+        live: true,
+        note: "With a saved container",
         tone: "orange",
         icon: "rocket",
       },
-    ],
-    [loading, projects.length]
-  );
+    ];
+  }, [
+    loading,
+    projects.length,
+    containerState.loading,
+    containerState.available,
+    containerState.containers,
+    runs,
+    runsLoading,
+  ]);
 
   const recentProjects = useMemo(
     () =>
@@ -104,38 +179,13 @@ export default function Dashboard() {
           name: project.name,
           description:
             project.description || project.language || "No description",
-          status: "Active",
+          status: project.language || "No language",
           icon: "code",
           tone: "purple",
           path: "/projects",
         })),
     [projects]
   );
-
-  const activities = useMemo(() => {
-    const projectActivities = sortByNewest(projects)
-      .slice(0, 2)
-      .map((project) => ({
-        id: `project-${project.id}`,
-        title: "Project created",
-        subtitle: project.name,
-        time: timeAgo(project.created_at),
-        icon: "folder",
-        tone: "green",
-      }));
-
-    return [
-      {
-        id: "workspace-synced",
-        title: "Workspace synced",
-        subtitle: "Django REST API",
-        time: "Just now",
-        icon: "settings",
-        tone: "blue",
-      },
-      ...projectActivities,
-    ].slice(0, 3);
-  }, [projects]);
 
   return (
     <div className="space-y-4">
@@ -153,7 +203,7 @@ export default function Dashboard() {
             />
             <div>
               <p className="text-xs font-semibold text-red-200">
-                Backend connection failed
+                Could not load your projects
               </p>
               <p className="mt-0.5 text-[11px] leading-relaxed text-red-300/80">
                 {error}

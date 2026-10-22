@@ -200,3 +200,81 @@
 .chat-row .page-input {
     margin-bottom: 0;
 }
+
+/* ===========================================
+   DOCKER
+=========================================== */
+
+.docker-toolbar {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+}
+
+.docker-list {
+    display: grid;
+    gap: 12px;
+}
+
+.docker-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 16px;
+    flex-wrap: wrap;
+    padding: 16px;
+    background: #0f172a;
+    border: 1px solid #334155;
+    border-radius: 10px;
+}
+
+.docker-item h3 {
+    margin: 0 0 6px;
+    font-size: 16px;
+    overflow-wrap: anywhere;
+}
+
+.docker-meta {
+    margin: 3px 0;
+    color: #94a3b8;
+    font-size: 13px;
+    overflow-wrap: anywhere;
+}
+
+.docker-actions {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.docker-running {
+    color: #22C55E;
+    font-size: 12px;
+    text-transform: uppercase;
+    margin-left: 6px;
+}
+
+.docker-stopped {
+    color: #f87171;
+    font-size: 12px;
+    text-transform: uppercase;
+    margin-left: 6px;
+}
+
+.docker-logs-wrap {
+    margin-top: 18px;
+}
+
+.docker-logs {
+    margin: 10px 0 0;
+    padding: 12px;
+    max-height: 300px;
+    overflow: auto;
+    background: #0f172a;
+    border: 1px solid #334155;
+    border-radius: 8px;
+    color: #e2e8f0;
+    white-space: pre-wrap;
+    font-size: 12px;
+}

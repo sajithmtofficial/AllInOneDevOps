@@ -1,7 +1,8 @@
-import { useEffect, useState } from "react";
+﻿import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Calendar, GitBranch, Plus, User } from "lucide-react";
 import { DockerWhale, InfinityLogo, Icon } from "./icons";
+import { useAuth } from "../context/AuthContext";
 
 function LiveClock() {
   const [now, setNow] = useState(() => new Date());
@@ -120,6 +121,9 @@ function HeroIllustration() {
 }
 
 export default function HeroBanner() {
+  const { username } = useAuth();
+  const displayName = username || "there";
+
   return (
     <section className="relative isolate overflow-hidden rounded-2xl border border-white/[0.09] bg-gradient-to-br from-[#2a145c] via-[#151d49] to-[#0b1b3f] shadow-[0_40px_100px_-50px_rgba(79,70,229,0.8)]">
       <div className="pointer-events-none absolute -left-24 -top-32 h-80 w-80 rounded-full bg-violet-600/25 blur-3xl" />
@@ -131,17 +135,17 @@ export default function HeroBanner() {
         <div className="max-w-[600px]">
           <div className="mb-5 flex items-center justify-between gap-3 sm:hidden">
             <p className="text-sm font-medium text-violet-200/90">
-              Good to see you again 👋
+              Good to see you again
             </p>
           </div>
 
           <p className="mb-3 hidden text-sm font-medium text-violet-200/90 sm:block">
-            Good to see you again 👋
+            Good to see you again
           </p>
 
           <h1 className="text-[30px] font-bold leading-[1.12] tracking-tight text-white sm:text-[36px] lg:text-[40px] xl:text-[44px]">
             Welcome Back,{" "}
-            <span className="text-gradient">Sajith!</span>
+            <span className="text-gradient">{displayName}!</span>
           </h1>
 
           <p className="mt-3 max-w-lg text-sm leading-relaxed text-slate-300/85 sm:text-[15px]">

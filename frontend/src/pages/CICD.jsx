@@ -7,6 +7,7 @@ export default function CICD() {
   const [repoUrl, setRepoUrl] = useState("");
   const [branch, setBranch] = useState("main");
   const [buildDocker, setBuildDocker] = useState(true);
+  const [deploy, setDeploy] = useState(true);
   const [running, setRunning] = useState(false);
   const [job, setJob] = useState(null);
   const [error, setError] = useState("");
@@ -22,13 +23,18 @@ export default function CICD() {
     setJob(null);
 
     try {
+      const token = localStorage.getItem("access");
       const response = await fetch(`${API_URL}/pipeline/run/`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        },
         body: JSON.stringify({
           repo_url: repoUrl.trim(),
           branch: branch.trim() || "main",
           build_docker: buildDocker,
+          deploy: deploy,
         }),
       });
 
@@ -72,8 +78,8 @@ if (!response.ok) {
           <p className="cicd-eyebrow">DEVOPS AUTOMATION</p>
           <h1>CI/CD Pipeline</h1>
           <p>
-            Checkout, build, test and Docker-build your Git repository from
-            one place.
+            Checkout, build, test, Docker-build and deploy your Git
+            repository from one place.
           </p>
         </div>
       </div>
@@ -98,14 +104,25 @@ if (!response.ok) {
             />
           </div>
 
-          <label className="docker-option">
-            <input
-              type="checkbox"
-              checked={buildDocker}
-              onChange={(e) => setBuildDocker(e.target.checked)}
-            />
-            Build Docker image when Dockerfile exists
-          </label>
+          <div className="cicd-options">
+            <label className="docker-option">
+              <input
+                type="checkbox"
+                checked={buildDocker}
+                onChange={(e) => setBuildDocker(e.target.checked)}
+              />
+              Build Docker image when Dockerfile exists
+            </label>
+
+            <label className="docker-option">
+              <input
+                type="checkbox"
+                checked={deploy}
+                onChange={(e) => setDeploy(e.target.checked)}
+              />
+              Deploy the built image as a container
+            </label>
+          </div>
         </div>
 
         <button
@@ -167,6 +184,35 @@ if (!response.ok) {
               </div>
             ))}
           </div>
+
+          {job.deployment && (
+            <div className="deployment-box">
+              <h2>Deployment</h2>
+              <p>
+                <strong>Container:</strong> {job.deployment.container}
+              </p>
+              <p>
+                <strong>Image:</strong> {job.deployment.image}
+              </p>
+              {job.deployment.ports && (
+                <pre className="deployment-ports">{job.deployment.ports}</pre>
+              )}
+              {job.deployment.url ? (
+                <a
+                  className="deployment-link"
+                  href={job.deployment.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Open deployed app ↗
+                </a>
+              ) : (
+                <p className="deployment-hint">
+                  The image does not expose a port, so no URL was assigned.
+                </p>
+              )}
+            </div>
+          )}
         </section>
       )}
     </div>

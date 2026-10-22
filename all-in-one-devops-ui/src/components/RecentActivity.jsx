@@ -15,6 +15,10 @@ const tones = {
     dot: "bg-violet-400",
     glow: "shadow-[0_0_12px_2px_rgba(167,139,250,0.5)]",
   },
+  red: {
+    dot: "bg-rose-400",
+    glow: "shadow-[0_0_12px_2px_rgba(251,113,133,0.5)]",
+  },
 };
 
 export default function RecentActivity({
@@ -35,7 +39,7 @@ export default function RecentActivity({
         </div>
 
         <Link
-          to="/monitoring"
+          to="/history"
           className="inline-flex items-center gap-1.5 text-xs font-medium text-blue-400 transition hover:text-blue-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-400/60"
         >
           View All

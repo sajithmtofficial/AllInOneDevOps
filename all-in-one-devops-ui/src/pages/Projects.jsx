@@ -1,23 +1,28 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
-import { useSearchParams } from "react-router-dom";
+﻿import { useCallback, useEffect, useMemo, useState } from "react";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import {
   AlertCircle,
   CheckCircle2,
   Code2,
-  ExternalLink,
+  FileCode2,
   FolderGit2,
   FolderPlus,
   GitBranch,
+  History,
   Languages,
+  Link2,
   Loader2,
   Pencil,
   Plus,
   RefreshCw,
-  Search,
+  Share2,
   Trash2,
+  Users,
   X,
 } from "lucide-react";
+import JoinLinkModal from "../components/JoinLinkModal";
 import ProjectModal from "../components/ProjectModal";
+import ShareProjectModal from "../components/ShareProjectModal";
 import { GitHubIcon } from "../components/icons";
 import {
   createProject,
@@ -54,7 +59,9 @@ function SummaryCard({ icon: IconComponent, label, value, accent }) {
   );
 }
 
-function ProjectCard({ project, deleting, onEdit, onDelete }) {
+function ProjectCard({ project, deleting, onEdit, onDelete, onShare }) {
+  const collaboratorCount = Number(project.member_count || 0);
+
   return (
     <article
       className={`card-glow flex min-w-0 flex-col rounded-2xl border border-white/[0.06] bg-[#11162b] p-5 transition ${
@@ -65,10 +72,21 @@ function ProjectCard({ project, deleting, onEdit, onDelete }) {
         <span className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-violet-500/10 text-violet-300 ring-1 ring-violet-400/15">
           <Code2 size={19} />
         </span>
-        <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-500/10 px-2.5 py-1 text-[10px] font-semibold text-emerald-300 ring-1 ring-emerald-400/10">
-          <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
-          Active
-        </span>
+        {collaboratorCount > 0 ? (
+          <span
+            title={`${collaboratorCount} collaborator${
+              collaboratorCount === 1 ? "" : "s"
+            }`}
+            className="inline-flex items-center gap-1.5 rounded-full bg-blue-500/10 px-2.5 py-1 text-[10px] font-semibold text-blue-300 ring-1 ring-blue-400/10"
+          >
+            <Users size={11} />
+            Shared
+          </span>
+        ) : (
+          <span className="inline-flex items-center gap-1.5 rounded-full bg-white/[0.04] px-2.5 py-1 text-[10px] font-semibold text-slate-400 ring-1 ring-white/[0.06]">
+            {project.owner_username ? "Private" : "Workspace"}
+          </span>
+        )}
       </div>
 
       <h3 className="mt-4 truncate text-[15px] font-semibold text-white">
@@ -87,10 +105,19 @@ function ProjectCard({ project, deleting, onEdit, onDelete }) {
           <GitBranch size={11} />
           {project.branch || "main"}
         </span>
+        {collaboratorCount > 0 && (
+          <span className="inline-flex items-center gap-1.5 rounded-lg bg-violet-500/[0.08] px-2 py-1 text-[10px] font-medium text-violet-300 ring-1 ring-violet-400/10">
+            <Users size={11} />
+            {collaboratorCount + 1} people
+          </span>
+        )}
       </div>
 
       <div className="mt-auto flex items-center justify-between gap-3 border-t border-white/[0.06] pt-4">
         <span className="min-w-0 truncate text-[10px] text-slate-500">
+          {project.owner_username
+            ? `By ${project.owner_username} · `
+            : ""}
           Created {formatDate(project.created_at)}
         </span>
 
@@ -107,29 +134,60 @@ function ProjectCard({ project, deleting, onEdit, onDelete }) {
               <GitHubIcon size={15} />
             </a>
           )}
-          <button
-            type="button"
-            onClick={() => onEdit(project)}
-            title="Edit project"
-            aria-label={`Edit ${project.name}`}
+          <Link
+            to={`/editor?project=${project.id}`}
+            title="Open shared code workspace"
+            aria-label={`Open ${project.name} in the code editor`}
             className="grid h-8 w-8 place-items-center rounded-lg text-slate-400 transition hover:bg-white/[0.06] hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-400/60"
           >
-            <Pencil size={14} />
-          </button>
-          <button
-            type="button"
-            onClick={() => onDelete(project)}
-            disabled={deleting}
-            title="Delete project"
-            aria-label={`Delete ${project.name}`}
-            className="grid h-8 w-8 place-items-center rounded-lg text-slate-400 transition hover:bg-red-500/10 hover:text-red-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-red-400/60 disabled:cursor-not-allowed"
+            <FileCode2 size={14} />
+          </Link>
+          <Link
+            to={`/history?project=${project.id}`}
+            title="View project change history"
+            aria-label={`View change history for ${project.name}`}
+            className="grid h-8 w-8 place-items-center rounded-lg text-slate-400 transition hover:bg-white/[0.06] hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-400/60"
           >
-            {deleting ? (
-              <Loader2 size={14} className="animate-spin" />
-            ) : (
-              <Trash2 size={14} />
-            )}
-          </button>
+            <History size={14} />
+          </Link>
+          {project.can_manage && (
+            <button
+              type="button"
+              onClick={() => onShare(project)}
+              title="Share project"
+              aria-label={`Share ${project.name}`}
+              className="grid h-8 w-8 place-items-center rounded-lg text-slate-400 transition hover:bg-white/[0.06] hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-400/60"
+            >
+              <Share2 size={14} />
+            </button>
+          )}
+          {project.can_edit && (
+            <button
+              type="button"
+              onClick={() => onEdit(project)}
+              title="Edit project"
+              aria-label={`Edit ${project.name}`}
+              className="grid h-8 w-8 place-items-center rounded-lg text-slate-400 transition hover:bg-white/[0.06] hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-400/60"
+            >
+              <Pencil size={14} />
+            </button>
+          )}
+          {project.can_manage && (
+            <button
+              type="button"
+              onClick={() => onDelete(project)}
+              disabled={deleting}
+              title="Delete project"
+              aria-label={`Delete ${project.name}`}
+              className="grid h-8 w-8 place-items-center rounded-lg text-slate-400 transition hover:bg-red-500/10 hover:text-red-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-red-400/60 disabled:cursor-not-allowed"
+            >
+              {deleting ? (
+                <Loader2 size={14} className="animate-spin" />
+              ) : (
+                <Trash2 size={14} />
+              )}
+            </button>
+          )}
         </div>
       </div>
     </article>
@@ -137,8 +195,10 @@ function ProjectCard({ project, deleting, onEdit, onDelete }) {
 }
 
 export default function Projects() {
+  const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const [projects, setProjects] = useState([]);
+  const [joinOpen, setJoinOpen] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [query, setQuery] = useState("");
@@ -148,6 +208,15 @@ export default function Projects() {
   const [modalError, setModalError] = useState("");
   const [deletingId, setDeletingId] = useState(null);
   const [feedback, setFeedback] = useState("");
+  const [sharing, setSharing] = useState(null);
+
+  useEffect(() => {
+    const search = searchParams.get("q");
+
+    if (search !== null) {
+      setQuery(search);
+    }
+  }, [searchParams]);
 
   const loadProjects = useCallback(async (signal) => {
     setLoading(true);
@@ -191,6 +260,59 @@ export default function Projects() {
   }, [searchParams, setSearchParams]);
 
   useEffect(() => {
+    const editId = searchParams.get("edit");
+
+    if (!editId || loading) {
+      return;
+    }
+
+    const nextParams = new URLSearchParams(searchParams);
+    nextParams.delete("edit");
+    setSearchParams(nextParams, { replace: true });
+
+    const project = projects.find(
+      (item) => String(item.id) === String(editId)
+    );
+
+    if (!project) {
+      setFeedback("That project could not be found.");
+      return;
+    }
+
+    setEditing(project);
+    setModalError("");
+    setModalOpen(true);
+  }, [loading, projects, searchParams, setSearchParams]);
+
+  useEffect(() => {
+    const shareId = searchParams.get("share");
+
+    if (!shareId || loading) {
+      return;
+    }
+
+    const nextParams = new URLSearchParams(searchParams);
+    nextParams.delete("share");
+    setSearchParams(nextParams, { replace: true });
+
+    const project = projects.find(
+      (item) => String(item.id) === String(shareId)
+    );
+
+    if (!project) {
+      setFeedback("That project could not be found.");
+      return;
+    }
+
+    if (!project.can_manage) {
+      setFeedback("Only the project owner can manage sharing.");
+      return;
+    }
+
+    setSharing(project);
+  }, [loading, projects, searchParams, setSearchParams]);
+
+  useEffect(() => {
     if (!feedback) {
       return undefined;
     }
@@ -224,6 +346,13 @@ export default function Projects() {
     [projects]
   );
 
+  const clearSearch = () => {
+    setQuery("");
+    const nextParams = new URLSearchParams(searchParams);
+    nextParams.delete("q");
+    setSearchParams(nextParams, { replace: true });
+  };
+
   const openCreate = () => {
     setEditing(null);
     setModalError("");
@@ -244,6 +373,11 @@ export default function Projects() {
     setModalOpen(false);
     setEditing(null);
     setModalError("");
+  };
+
+  const closeShare = () => {
+    setSharing(null);
+    loadProjects();
   };
 
   const handleSave = async (payload) => {
@@ -304,8 +438,8 @@ export default function Projects() {
             Your Projects
           </h1>
           <p className="mt-1.5 max-w-xl text-xs leading-relaxed text-slate-400 sm:text-[13px]">
-            Manage every project in your Django workspace, from repository
-            details to the branch that ships it.
+            Manage every project in your workspace, from repository details to
+            the branch that ships it.
           </p>
         </div>
 
@@ -314,11 +448,20 @@ export default function Projects() {
             type="button"
             onClick={() => loadProjects()}
             disabled={loading}
-            title="Sync with backend"
-            aria-label="Sync projects with backend"
+            title="Refresh projects"
+            aria-label="Refresh projects"
             className="grid h-11 w-11 place-items-center rounded-xl border border-white/[0.08] bg-white/[0.03] text-slate-300 transition hover:bg-white/[0.07] hover:text-white disabled:cursor-not-allowed disabled:opacity-50"
           >
             <RefreshCw size={16} className={loading ? "animate-spin" : ""} />
+          </button>
+          <button
+            type="button"
+            onClick={() => setJoinOpen(true)}
+            title="Join a project with an invite link"
+            className="inline-flex h-11 items-center justify-center gap-2 rounded-xl border border-white/[0.08] bg-white/[0.03] px-3 text-xs font-semibold text-slate-200 transition hover:bg-white/[0.07] sm:px-4"
+          >
+            <Link2 size={15} />
+            <span className="hidden sm:inline">Join with link</span>
           </button>
           <button
             type="button"
@@ -335,19 +478,19 @@ export default function Projects() {
         <SummaryCard
           icon={FolderGit2}
           label="Total projects"
-          value={loading ? "—" : projects.length}
+          value={loading ? "..." : projects.length}
           accent="bg-violet-500/10 text-violet-300 ring-violet-400/15"
         />
         <SummaryCard
           icon={Languages}
           label="Languages"
-          value={loading ? "—" : languageCount}
+          value={loading ? "..." : languageCount}
           accent="bg-blue-500/10 text-blue-300 ring-blue-400/15"
         />
         <SummaryCard
           icon={GitHubIcon}
           label="GitHub linked"
-          value={loading ? "—" : githubCount}
+          value={loading ? "..." : githubCount}
           accent="bg-emerald-500/10 text-emerald-300 ring-emerald-400/15"
         />
       </section>
@@ -399,31 +542,7 @@ export default function Projects() {
         </div>
       )}
 
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <div className="relative w-full sm:max-w-sm">
-          <Search
-            size={15}
-            className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500"
-          />
-          <input
-            type="search"
-            value={query}
-            onChange={(event) => setQuery(event.target.value)}
-            placeholder="Search projects, languages, branches..."
-            className="h-11 w-full rounded-xl border border-white/[0.08] bg-[#11162b] pl-10 pr-10 text-xs text-white placeholder:text-slate-500 outline-none transition focus:border-violet-500/50 focus:ring-4 focus:ring-violet-500/10"
-          />
-          {query && (
-            <button
-              type="button"
-              onClick={() => setQuery("")}
-              aria-label="Clear project search"
-              className="absolute right-2.5 top-1/2 grid h-6 w-6 -translate-y-1/2 place-items-center rounded-md text-slate-500 transition hover:bg-white/[0.06] hover:text-white"
-            >
-              <X size={13} />
-            </button>
-          )}
-        </div>
-
+      <div className="flex flex-wrap items-center justify-between gap-3">
         <p className="text-[11px] text-slate-500">
           {loading
             ? "Loading projects..."
@@ -431,6 +550,17 @@ export default function Projects() {
                 projects.length === 1 ? "" : "s"
               }`}
         </p>
+
+        {query && (
+          <button
+            type="button"
+            onClick={clearSearch}
+            className="inline-flex items-center gap-1.5 rounded-lg border border-violet-400/20 bg-violet-500/10 px-2.5 py-1.5 text-[10px] font-medium text-violet-200 transition hover:bg-violet-500/15 focus:outline-none focus-visible:ring-2 focus-visible:ring-violet-400/50"
+          >
+            Filtered by "{query}"
+            <X size={12} />
+          </button>
+        )}
       </div>
 
       {loading ? (
@@ -467,7 +597,7 @@ export default function Projects() {
           </h2>
           <p className="mx-auto mt-1.5 max-w-sm text-xs leading-relaxed text-slate-500">
             {projects.length === 0
-              ? "Create your first project and it will be stored in the Django backend."
+              ? "Create your first project to get started."
               : "Try a different search term or clear the filter to see everything."}
           </p>
           <button
@@ -476,7 +606,7 @@ export default function Projects() {
               if (projects.length === 0) {
                 openCreate();
               } else {
-                setQuery("");
+                clearSearch();
               }
             }}
             className="mt-5 inline-flex h-10 items-center justify-center gap-2 rounded-xl bg-white/[0.06] px-4 text-xs font-semibold text-white ring-1 ring-white/[0.08] transition hover:bg-white/[0.1]"
@@ -500,18 +630,11 @@ export default function Projects() {
               deleting={deletingId === project.id}
               onEdit={openEdit}
               onDelete={handleDelete}
+              onShare={setSharing}
             />
           ))}
         </div>
       )}
-
-      <div className="flex items-center gap-2 rounded-xl border border-white/[0.05] bg-white/[0.015] px-3.5 py-2.5 text-[10px] text-slate-500">
-        <ExternalLink size={12} />
-        Projects are synced with the Django REST API at
-        <code className="rounded bg-white/[0.05] px-1.5 py-0.5 text-slate-400">
-          /api/projects/
-        </code>
-      </div>
 
       <ProjectModal
         open={modalOpen}
@@ -520,6 +643,21 @@ export default function Projects() {
         error={modalError}
         onClose={closeModal}
         onSubmit={handleSave}
+      />
+
+      <ShareProjectModal
+        open={Boolean(sharing)}
+        project={sharing}
+        onClose={closeShare}
+        onChanged={() => loadProjects()}
+      />
+
+      <JoinLinkModal
+        open={joinOpen}
+        onClose={() => setJoinOpen(false)}
+        onJoined={(project) =>
+          navigate(`/editor?project=${project.id}`)
+        }
       />
     </div>
   );

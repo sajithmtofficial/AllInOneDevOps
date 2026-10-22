@@ -5,8 +5,8 @@ import { Icon } from "./icons";
 
 function StatusBadge({ status }) {
   return (
-    <span className="inline-flex shrink-0 items-center gap-1.5 rounded-full bg-emerald-500/10 px-2.5 py-1 text-[10px] font-semibold text-emerald-400 ring-1 ring-emerald-400/15">
-      <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.8)]" />
+    <span className="inline-flex shrink-0 items-center gap-1.5 rounded-full bg-white/[0.04] px-2.5 py-1 text-[10px] font-semibold text-slate-400 ring-1 ring-white/[0.08]">
+      <span className="h-1.5 w-1.5 rounded-full bg-slate-500" />
       {status}
     </span>
   );
@@ -53,17 +53,28 @@ function ProjectRow({ project }) {
         {menuOpen && (
           <div className="absolute right-0 top-11 z-20 w-40 overflow-hidden rounded-xl border border-white/[0.08] bg-[#171d35] p-1 shadow-2xl shadow-black/50">
             <Link
-              to="/projects"
+              to={`/editor?project=${project.id}`}
+              onClick={() => setMenuOpen(false)}
               className="block rounded-lg px-3 py-2 text-xs text-slate-300 transition hover:bg-white/[0.05] hover:text-white"
             >
               Open project
             </Link>
             <Link
-              to="/settings"
+              to={`/projects?edit=${project.id}`}
+              onClick={() => setMenuOpen(false)}
               className="block rounded-lg px-3 py-2 text-xs text-slate-300 transition hover:bg-white/[0.05] hover:text-white"
             >
               Project settings
             </Link>
+            {project.can_manage && (
+              <Link
+                to={`/projects?share=${project.id}`}
+                onClick={() => setMenuOpen(false)}
+                className="block rounded-lg px-3 py-2 text-xs text-slate-300 transition hover:bg-white/[0.05] hover:text-white"
+              >
+                Share project
+              </Link>
+            )}
           </div>
         )}
       </div>
